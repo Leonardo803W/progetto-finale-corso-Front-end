@@ -1,0 +1,224 @@
+/*con header, main e footer globale intendo tutte quelle caratteristiche che dovranno avere indipendemente in quale pagina si trovano*/
+
+/*header globale*/
+
+header a{
+  text-decoration: none;
+}
+
+header{
+  padding: 1em;
+  color: white;
+  background-color: #0a0a0a;
+  border-bottom: solid 3px rgb(246, 250, 31);
+}
+
+.data {
+  z-index: 3;
+  position: absolute;
+}
+
+/*header Home*/
+
+.link{
+  color: white;
+}
+
+.brand{
+  font-size: x-large;
+  font-weight: bolder;
+  color: orangered;
+}
+
+.search{
+  margin-right: 0.5em;
+}
+
+/*main globale*/
+
+main{
+  margin: 0;
+  text-align: center;
+}
+
+/*main Home*/
+
+.data{
+  position: absolute;
+  z-index: 3;
+}
+
+.selection{
+  position: relative;
+}
+
+/* questa classe serve per assicurare che tutto cio al disotto del form si oscuri
+e con l'indez 1 per non contrastare il form, se fosse superiore a questul'timo non ci sarebbe l'oscuramento */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /*per oscurare lo sfondo*/
+  z-index: 1; 
+}
+
+.form{
+  padding: 2em;
+  text-align: center;
+  box-shadow: -1px 1px 13px 1px;
+  width: 60%;
+  position: absolute;
+  left: 18em;
+  bottom: 15em;
+  background-color: white;
+  z-index: 2;
+}
+
+.listSuggest{
+  position: absolute;
+  z-index: 1;
+  background-color: white;
+  box-shadow: 1px 1px 8px 1px;
+  flex-direction: column;
+  display: flex;
+  padding-bottom: 1em;
+  padding-right: 1em;
+}
+
+.pointImg{
+  margin-right: 1em;
+    border: 1px solid gray;
+    padding: 1em;
+    height: 50px;
+    width: 50px;
+}
+
+.listElement{
+  list-style: none;
+}
+
+.selection{
+  display: inline-flex;
+  border: 2px solid #c5bcbcb3;
+  margin-top: 1em;
+  justify-content: space-around;
+  width: 90%;
+}
+
+#adults{
+  width: 120px;
+}
+
+#childe{
+  width: 120px;
+}
+
+.buttonSerach{
+  margin-top: 1em;
+  margin-left: 0em;
+  text-align: center;
+  padding: 1em;
+  background-color: red;
+  width: 85%;
+  border: none;
+  color: white;
+}
+
+.bigSection{
+  justify-content: center;
+  display: inline-flex;
+  flex-wrap: wrap;
+  margin: 1em;
+}
+
+.article{
+  margin: 1em;
+  width: 20%;
+  box-shadow: 1px 1px 7px;
+  border-radius: 10%;
+}
+
+.article img{
+  border-top-right-radius: 10%;
+  border-top-left-radius: 10%;
+  height: 40%;
+}
+
+.article h4{
+  margin: 0;
+  padding: 0.5em;
+  font-size: larger;
+}
+
+.article p{
+  margin: 0;
+  padding: 1em;
+}
+
+.article button{
+  margin-bottom: 2em;
+}
+
+/*header List*/
+
+.settings{
+  display: inline-flex;
+}
+
+.settings button{
+  border: none;
+}
+
+.profile{
+  border: none;
+  border-radius: 15px;
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
+  padding-right: 1em;
+  padding-left: 1em;
+}
+
+.guestPicker{
+  background-color: white;
+  color: black;
+  position: absolute;
+  z-index: 3;
+  padding: 1em;
+  box-shadow: 1px 1px 6px;
+}
+
+.guestPicker button{
+  background-color: white;
+  margin: 0.5em;
+}
+
+/*main List*/
+
+.card{
+  width: 30%;
+}
+
+.card img {
+  width: 30%;
+}
+
+/*main Dettaglio*/
+
+.imageProduct{
+  margin: 2em;
+}
+
+.imageProduct img{
+  height: 200px;
+}
+
+/*footer*/
+
+.footerBorder {
+  padding: 2em;
+  color: white;
+  background-color: #282c34;
+  border-top: solid 3px blue;
+}
