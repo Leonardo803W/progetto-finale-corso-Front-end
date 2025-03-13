@@ -1,4 +1,4 @@
-import NavbarList from './ListNavbar';
+import GlobalNavbar from './GlobalNavbar';
 import MyFooter from './MyFooter';
 
 const SchermataFavoriti = () => {
@@ -6,13 +6,16 @@ const SchermataFavoriti = () => {
     return(
         <>
             <header>
-                <NavbarList/>
+                <GlobalNavbar/>
             </header>
 
-            <h2>
-                I miei preferiti
-            </h2>
+            <main>
+                <h2>
+                    I miei preferiti
+                </h2>
 
+            </main>
+            
             <footer>
                 <MyFooter/>
             </footer>

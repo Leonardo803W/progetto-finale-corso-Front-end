@@ -15,6 +15,7 @@ class ListNavbar extends Component {
       isStartDatePickerOpen: false,
       isEndDatePickerOpen: false,
       isGuestPickerOpen: false,
+      isProfileDropdownOpen: false,
       adults: 0,
       children: 0,
     };
@@ -22,23 +23,7 @@ class ListNavbar extends Component {
     this.startDatePickerRef = React.createRef();
     this.endDatePickerRef = React.createRef();
     this.guestPickerRef = React.createRef();
-  }
-
-  componentDidMount() {
-    const query = new URLSearchParams(this.props.location.search);
-    const country = query.get('country');
-    const startDate = query.get('startDate');
-    const endDate = query.get('endDate');
-    const adults = query.get('adults');
-    const children = query.get('children');
-
-    this.setState({
-      country: country || '',
-      startDate: startDate ? new Date(startDate) : null,
-      endDate: endDate ? new Date(endDate) : null,
-      adults: adults ? parseInt(adults, 10) : 0,
-      children: children ? parseInt(children, 10) : 0,
-    });
+    this.profileDropdownRef = React.createRef();
   }
 
   handleStartDateChange = (date) => {
@@ -67,6 +52,12 @@ class ListNavbar extends Component {
     }));
   };
 
+  toggleProfileDropdown = () => {
+    this.setState((prevState) => ({
+      isProfileDropdownOpen: !prevState.isProfileDropdownOpen,
+    }));
+  };
+
   handleClickOutside = (event) => {
     if (
       this.startDatePickerRef.current &&
@@ -74,12 +65,15 @@ class ListNavbar extends Component {
       this.endDatePickerRef.current &&
       !this.endDatePickerRef.current.contains(event.target) &&
       this.guestPickerRef.current &&
-      !this.guestPickerRef.current.contains(event.target)
+      !this.guestPickerRef.current.contains(event.target) &&
+      this.profileDropdownRef.current &&
+      !this.profileDropdownRef.current.contains(event.target) 
     ) {
       this.setState({
         isStartDatePickerOpen: false,
         isEndDatePickerOpen: false,
         isGuestPickerOpen: false,
+        isProfileDropdownOpen: false,
       });
     }
   };
@@ -88,7 +82,7 @@ class ListNavbar extends Component {
     document.addEventListener('click', this.handleClickOutside);
   }
 
-  componentWillUnmount() {
+  componentWillUnmount() { 
     document.removeEventListener('click', this.handleClickOutside);
   }
 
@@ -109,7 +103,8 @@ class ListNavbar extends Component {
   };
 
   render() {
-    const { startDate, endDate, isStartDatePickerOpen, isEndDatePickerOpen, isGuestPickerOpen, adults, children } = this.state;
+
+    const { startDate, endDate, isStartDatePickerOpen, isEndDatePickerOpen, isGuestPickerOpen, isProfileDropdownOpen, adults, children } = this.state;
 
     return (
       <section className="d-inline-flex justify-content-between w-100 pe-4 ps-4 align-items-center">
@@ -120,7 +115,11 @@ class ListNavbar extends Component {
         <div className="settings">
           <button>
             <label className='d-block pb-2 pe-2'>dove</label>
-            <input type="text" className='p-2 border-0' />
+            <input 
+              type="text" 
+              className = 'p-2 border-0' 
+              placeholder = "stato, paese o nazione"
+            />
           </button>
 
           <div ref={this.startDatePickerRef}>
@@ -196,14 +195,26 @@ class ListNavbar extends Component {
 
         </div>
 
-        <button className="profile">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-list" viewBox="0 0 16 16" className="me-2">
-            <path fillRule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5"/>
-          </svg>
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-person-circle" viewBox="0 0 16 16">
-            <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
-            <path fillRule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"/>
-          </svg>
+        <button className="profile" onClick={this.toggleProfileDropdown} ref={this.profileDropdownRef}>
+
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-list" viewBox="0 0 16 16" className="me-2">
+              <path fillRule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5"/>
+            </svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-person-circle" viewBox="0 0 16 16">
+              <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
+              <path fillRule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"/>
+            </svg>
+
+            {isProfileDropdownOpen && (
+              <div className = "profileDropdown">
+                <ul>
+                  <li>Il mio profilo</li>
+                  <li>Impostazioni</li>
+                  <li>Preferiti</li>
+                  <li>Logout</li>
+                </ul>
+              </div>
+            )}
         </button>
 
       </section>

@@ -1,5 +1,6 @@
 import '../App.css'; 
-import NavbarList from './ListNavbar';
+import ListNavbar from './ListNavbar';
+
 import MainList from './MainList';
 import MyFooter from './MyFooter';
 
@@ -8,7 +9,7 @@ const SchermataList = () => {
   return (
     <>
       <header>
-        <NavbarList />
+       <ListNavbar/>
       </header>
       
       <main>

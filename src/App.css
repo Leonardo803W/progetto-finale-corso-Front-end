@@ -13,16 +13,16 @@ header{
   border-bottom: solid 3px rgb(246, 250, 31);
 }
 
+.link{
+  color: black;
+}
+
 .data {
   z-index: 3;
   position: absolute;
 }
 
 /*header Home*/
-
-.link{
-  color: white;
-}
 
 .brand{
   font-size: x-large;
@@ -165,10 +165,13 @@ e con l'indez 1 per non contrastare il form, se fosse superiore a questul'timo n
 
 .settings{
   display: inline-flex;
+  background-color: white;
+  color: black;
 }
 
 .settings button{
   border: none;
+  background-color: white;
 }
 
 .profile{
@@ -178,6 +181,25 @@ e con l'indez 1 per non contrastare il form, se fosse superiore a questul'timo n
   padding-bottom: 0.5em;
   padding-right: 1em;
   padding-left: 1em;
+}
+
+.profileDropdown{
+  position: absolute;
+}
+
+.profileDropdown ul{
+  position: absolute;
+    background-color: white;
+    padding: 1em;
+    margin: 0;
+    z-index: 3;
+    box-shadow: 1px 1px 11px;
+    border-radius: 10px;
+    left: -2em;
+}
+
+.profileDropdown ul li{
+  list-style: none;
 }
 
 .guestPicker{
@@ -195,6 +217,13 @@ e con l'indez 1 per non contrastare il form, se fosse superiore a questul'timo n
 }
 
 /*main List*/
+
+.preferitiImg{
+  position: absolute;
+  right: 1em;
+  top: 1em;
+  cursor: pointer;
+}
 
 .card{
   width: 30%;

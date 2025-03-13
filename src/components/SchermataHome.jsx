@@ -1,10 +1,8 @@
-import React, { useState } from 'react';
-
-import Navbar from './HomeNavbar';
 import Continents from './HomeContinents';
 import AnticheMeraviglieMondo from './HomeAnticheMeraviglieMondo';
 import ModerneMeraviglieMondo from './HomeModerneMeraviglieMondo';
 import MyFooter from './MyFooter';
+import GlobalNavbar from './GlobalNavbar';
 
 
 const SchermataHome = () =>{
@@ -12,7 +10,7 @@ const SchermataHome = () =>{
     return (
         <>
             <header>
-                <Navbar />
+                <GlobalNavbar />
             </header>
 
             <main>

@@ -1,4 +1,4 @@
-import NavbarList from './ListNavbar';
+import GlobalNavbar from './GlobalNavbar';
 import MainDettaglio from './MainDettaglio';
 import MyFooter from './MyFooter';
 
@@ -7,7 +7,7 @@ const SchermataDettaglio = () => {
   return (
     <>
         <header>
-            <NavbarList/>
+            <GlobalNavbar/>
         </header>
 
         <main>
