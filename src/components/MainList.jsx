@@ -8,10 +8,14 @@ import GlobalError from './GlobalError';
 
 const MainList = () => {
 
+  //inizializzazione variabili
+
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [favorites, setFavorites] = useState([]);
+
+  //chiamata fetch
 
   useEffect(() => {
 
@@ -39,6 +43,8 @@ const MainList = () => {
     fetchData();
   }, []);
 
+  //utilizzo dei componenti loading ed error
+
   if (loading) {
     return <GlobalLoading />;
   }
@@ -47,10 +53,16 @@ const MainList = () => {
     return <GlobalError />; 
   }
 
+  //funzione per i preferiti in cui se l'elemento e gia aggiunti lo fa deselezionare se invece non c'e' lo aggiunge
+
   const handleFavoriteClick = (item) => {
-    if (favorites.includes(item.id)) {
+
+    if (favorites.includes(item.id)) 
+    {
       setFavorites(favorites.filter(favId => favId !== item.id));
-    } else {
+    } 
+    else 
+    {
       setFavorites([...favorites, item.id]);
     }
   };
@@ -78,7 +90,7 @@ const MainList = () => {
             </div>
             <h3>{item.category}</h3>
             <p>{item.description}</p>
-            <Link to={`/Dettaglio/${item.id}`}>
+            <Link to = {`/Dettaglio/${item.id}`}>
               <button>Vai ai dettagli</button>
             </Link>
             <p>{item.price}</p>

@@ -7,6 +7,8 @@ class ListNavbar extends Component {
 
   constructor(props) {
     super(props);
+
+    //inizializzo le variabili
     
     this.state = {
       country: '',
@@ -19,6 +21,9 @@ class ListNavbar extends Component {
       adults: 0,
       children: 0,
     };
+
+    //utilizzo il ref per poter prendere i valori direttamente dal MOD
+    //utilizzo DatePicker per avere un calendario gia personalizzato con del css e funzionante
     
     this.startDatePickerRef = React.createRef();
     this.endDatePickerRef = React.createRef();
@@ -26,39 +31,60 @@ class ListNavbar extends Component {
     this.profileDropdownRef = React.createRef();
   }
 
+  //funzione per aprire la tenda per selezionare la data di chek-in
+
   handleStartDateChange = (date) => {
+
     this.setState({ startDate: date, isStartDatePickerOpen: false });
   };
 
+  //funzione per aprire la tenda per selezionare la data di chek-out
+
   handleEndDateChange = (date) => {
+
     this.setState({ endDate: date, isEndDatePickerOpen: false });
   };
 
+  //funzione per la chiusura della tend del chek-in
+
   toggleStartDatePicker = () => {
+
     this.setState((prevState) => ({
       isStartDatePickerOpen: !prevState.isStartDatePickerOpen
     }));
   };
 
+  //funzione per la chiusura della tend del chek-out
+
   toggleEndDatePicker = () => {
+
     this.setState((prevState) => ({
       isEndDatePickerOpen: !prevState.isEndDatePickerOpen
     }));
   };
 
+  //funzione per aprire la tenda per selezionare la quantita degli ospitit
+
   toggleGuestPicker = () => {
+
     this.setState((prevState) => ({
       isGuestPickerOpen: !prevState.isGuestPickerOpen
     }));
   };
 
+  //funzione per aprire la tenda del profilo
+
   toggleProfileDropdown = () => {
+
     this.setState((prevState) => ({
       isProfileDropdownOpen: !prevState.isProfileDropdownOpen,
     }));
   };
 
+  //funzione per chiudere le tende nel momento che si clicca al di fuori di esse
+
   handleClickOutside = (event) => {
+
     if (
       this.startDatePickerRef.current &&
       !this.startDatePickerRef.current.contains(event.target) &&
@@ -78,31 +104,45 @@ class ListNavbar extends Component {
     }
   };
 
+  //funzione che ascolta i click nel momento che il componente viene montato
+
   componentDidMount() {
+
     document.addEventListener('click', this.handleClickOutside);
   }
 
+  //funzione che ascolta i click nel momento che il componente viene smontato
+
   componentWillUnmount() { 
+
     document.removeEventListener('click', this.handleClickOutside);
   }
 
+  //funzioni per incrementare e diminuire il numero di ospiti
+
   incrementAdults = () => {
+
     this.setState((prevState) => ({ adults: prevState.adults + 1 }));
   };
 
   decrementAdults = () => {
+
     this.setState((prevState) => ({ adults: Math.max(prevState.adults - 1, 0) }));
   };
 
   incrementChildren = () => {
+
     this.setState((prevState) => ({ children: prevState.children + 1 }));
   };
 
   decrementChildren = () => {
+
     this.setState((prevState) => ({ children: Math.max(prevState.children - 1, 0) }));
   };
 
   render() {
+
+    //renderizzazione delle variabili
 
     const { startDate, endDate, isStartDatePickerOpen, isEndDatePickerOpen, isGuestPickerOpen, isProfileDropdownOpen, adults, children } = this.state;
 

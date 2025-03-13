@@ -16,11 +16,16 @@ class GlobalNavbar extends Component {
       this.profileDropdownRef = React.createRef();
     }
 
+  //funzione per aprire la tenda del profilo
+
     toggleProfileDropdown = () => {
+
       this.setState((prevState) => ({
         isProfileDropdownOpen: !prevState.isProfileDropdownOpen,
       }));
     };
+
+    //funzione per far chiudere la tenda al click al di fuori di essa
   
     handleClickOutside = (event) => {
       if (
@@ -44,27 +49,27 @@ class GlobalNavbar extends Component {
         
         <Link to = {"/"}>
           <div className="brand">
-            Viaggi Passione
+            Viaggi di Passione
           </div>
         </Link>
 
-          <Link to = {"/list"}>
-            <button>
+        <Link to = {"/list"}>
+          <button>
 
-              <svg 
-                xmlns="http://www.w3.org/2000/svg" 
-                width="16" 
-                height="16" 
-                fill="currentColor" 
-                className="search"
-                viewBox="0 0 16 16" 
-                >
-                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
-              </svg>
+            <svg 
+              xmlns="http://www.w3.org/2000/svg" 
+              width="16" 
+              height="16" 
+              fill="currentColor" 
+              className="search"
+              viewBox="0 0 16 16" 
+              >
+              <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+            </svg>
 
-                Vuoi passare direttamente alla ricerca?
-            </button>
-          </Link>
+              Vuoi passare direttamente alla ricerca?
+          </button>
+        </Link>
           
         <button className="profile" onClick={this.toggleProfileDropdown} ref={this.profileDropdownRef}>
 
@@ -79,14 +84,25 @@ class GlobalNavbar extends Component {
             {isProfileDropdownOpen && (
               <div className = "profileDropdown">
                 <ul>
-                  <li>Il mio profilo</li>
-                  <li>Impostazioni</li>
+                  <li>
+                    Il mio profilo
+                  </li>
+
+                  <li>
+                    Impostazioni
+                  </li>
+
                   <Link to = {"/favoriti"}
                     className = "link"
                   > 
-                    <li>Preferiti</li>
+                    <li>
+                      Preferiti
+                    </li>
                   </Link>
-                  <li>Logout</li>
+
+                  <li>
+                    Logout
+                  </li>
                 </ul>
               </div>
             )}

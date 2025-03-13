@@ -6,10 +6,14 @@ import GlobalError from './GlobalError';
 
 const MainDettaglio = () => {
 
-    const { id } = useParams();
+  //inizializzazione variabili
+
+  const { id } = useParams();
   const [product, setProduct] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  //chiamata fetch con l'id dell'elemento specifico passato come props
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -36,6 +40,8 @@ const MainDettaglio = () => {
   }, [id]);
 
   console.log(id)
+
+  //utilizzo dei componenti loading ed error
 
   if (loading) {
     return <GlobalLoading />;

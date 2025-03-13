@@ -4,6 +4,7 @@ import ModerneMeraviglieMondo from './HomeModerneMeraviglieMondo';
 import MyFooter from './MyFooter';
 import GlobalNavbar from './GlobalNavbar';
 
+//prima schermata
 
 const SchermataHome = () =>{
 
