@@ -210,7 +210,11 @@ class ListNavbar extends Component {
                 <ul>
                   <li>Il mio profilo</li>
                   <li>Impostazioni</li>
-                  <li>Preferiti</li>
+                  <Link to = {"/favoriti"}
+                    className = "link"
+                  > 
+                    <li>Preferiti</li>
+                  </Link>
                   <li>Logout</li>
                 </ul>
               </div>

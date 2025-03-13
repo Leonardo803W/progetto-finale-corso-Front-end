@@ -22,6 +22,15 @@ header{
   position: absolute;
 }
 
+/*loading globale*/
+
+.caricamentoSchermata{
+  margin: 2em;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 2em;
+}
+
 /*header Home*/
 
 .brand{

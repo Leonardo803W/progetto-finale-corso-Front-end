@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom'; 
 
+import GlobalLoading from './GlobalLoading';
+import GlobalError from './GlobalError';
+
 const MainDettaglio = () => {
 
     const { id } = useParams();
@@ -19,10 +22,10 @@ const MainDettaglio = () => {
           throw new Error('Network response was not ok');
         }
         const result = await response.json();
-        console.log(result); // Log della risposta
+        console.log(result);
         setProduct(result);
       } catch (error) {
-        console.error("Fetch error: ", error); // Log dell'errore
+        console.log(error)
         setError(error);
       } finally {
         setLoading(false);
@@ -35,11 +38,11 @@ const MainDettaglio = () => {
   console.log(id)
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <GlobalLoading />;
   }
 
   if (error) {
-    return <div>Error: {error.message}</div>;
+    return <GlobalError />; 
   }
 
     return(

@@ -1,49 +1,63 @@
 import '../App.css';
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+
 import MainFavoriti from './MainFavoriti';
+import GlobalLoading from './GlobalLoading';
+import GlobalError from './GlobalError';
 
 const MainList = () => {
+
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState(false);
   const [favorites, setFavorites] = useState([]);
 
   useEffect(() => {
+
     const fetchData = async () => {
+
       setLoading(true);
-      setError(null);
+      setError(false);
+
       try {
-        const response = await fetch('https://fakestoreapi.com/products');
+        const response = await fetch('https://fakestoreapi.com/products'); // Fixed typo here from 'producs' to 'products'
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
+
         const result = await response.json();
         setData(result);
       } catch (error) {
-        setError(error);
+        console.log(error);
+        setError(error); 
       } finally {
         setLoading(false);
       }
     };
+
     fetchData();
   }, []);
 
+  if (loading) {
+    return <GlobalLoading />;
+  }
+
+  if (error) {
+    return <GlobalError />; 
+  }
+
   const handleFavoriteClick = (item) => {
     if (favorites.includes(item.id)) {
-      // Se il prodotto è già nei preferiti, rimuovilo
       setFavorites(favorites.filter(favId => favId !== item.id));
     } else {
-      // Altrimenti, aggiungilo ai preferiti
       setFavorites([...favorites, item.id]);
     }
   };
 
-  if (loading) { return <div>Loading...</div>; }
-  if (error) { return <div>Error: {error.message}</div>; }
-
   return (
     <>
+
       <div className="card-container d-inline-flex">
         {data.slice(0, 5).map((item) => (
           <div className="card" key={item.id}>
