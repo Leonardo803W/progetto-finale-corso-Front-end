@@ -1,7 +1,0 @@
-package epicode.it.progetto_finale_corso_epicode.security;
-
-public enum Role {
-    ROLE_USER,
-    ROLE_ADMIN,
-    ROLE_SELLER
-}
