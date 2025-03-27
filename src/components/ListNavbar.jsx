@@ -85,16 +85,11 @@ class ListNavbar extends Component {
 
   handleClickOutside = (event) => {
 
-    if (
-      this.startDatePickerRef.current &&
-      !this.startDatePickerRef.current.contains(event.target) &&
-      this.endDatePickerRef.current &&
-      !this.endDatePickerRef.current.contains(event.target) &&
-      this.guestPickerRef.current &&
-      !this.guestPickerRef.current.contains(event.target) &&
-      this.profileDropdownRef.current &&
-      !this.profileDropdownRef.current.contains(event.target) 
-    ) {
+    if (this.startDatePickerRef.current && !this.startDatePickerRef.current.contains(event.target) &&
+        this.endDatePickerRef.current && !this.endDatePickerRef.current.contains(event.target) &&
+        this.guestPickerRef.current && !this.guestPickerRef.current.contains(event.target) &&
+        this.profileDropdownRef.current && !this.profileDropdownRef.current.contains(event.target)) 
+    {
       this.setState({
         isStartDatePickerOpen: false,
         isEndDatePickerOpen: false,
@@ -237,7 +232,7 @@ class ListNavbar extends Component {
 
         <button className="profile" onClick={this.toggleProfileDropdown} ref={this.profileDropdownRef}>
 
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-list" viewBox="0 0 16 16" className="me-2">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-list me-2" viewBox="0 0 16 16">
               <path fillRule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5"/>
             </svg>
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-person-circle" viewBox="0 0 16 16">

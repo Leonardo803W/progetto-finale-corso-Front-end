@@ -1,12 +1,11 @@
-import { Spinner } from 'react-bootstrap'
+import { Spinner } from 'react-bootstrap';
 
 const GlobalLoading = () => (
 
-    <p className = 'caricamentoSchermata'>
-        Caricamento del contenuto in corso....
-        <Spinner animation="border" variant="success" className="mt-2" />
-    </p>
-  
-)
+  <div className='caricamentoSchermata'>
+      Caricamento del contenuto in corso....
+    <Spinner animation="border" variant="success" className="mt-2" />
+  </div>
+);
 
-export default GlobalLoading
+export default GlobalLoading;
