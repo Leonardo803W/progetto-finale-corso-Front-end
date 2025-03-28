@@ -14,11 +14,22 @@ const SchermataHome = () =>{
                 <GlobalNavbar />
             </header>
 
-            <main>
+            <main className = 'imgCopertina'>
+                <h3 className = 'titlePrimary'>
+                    In quale continente ti piacerebbe andare?
+                </h3>
                 <Continents />
                 <hr />
+
+                <h3 className = 'titlePrimary'>
+                Quale meraviglia del mondo antico ti piacerebbe visitare?
+                </h3>
                 <AnticheMeraviglieMondo />
                 <hr />
+
+                <h3 className = 'titlePrimary'>
+                Quale meraviglia del mondo moderno ti piacerebbe visitare?
+                </h3>
                 <ModerneMeraviglieMondo />
             </main>
 

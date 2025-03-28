@@ -17,9 +17,47 @@ header{
   color: black;
 }
 
+.profile{
+  margin: 1em;
+}
+
 .data {
   z-index: 3;
   position: absolute;
+}
+
+.modal-overlay2{
+  background-color: rgba(0, 0, 0, 0.5);
+
+}
+
+.modal-overlay{
+  position: absolute;
+    color: black;
+    box-shadow: 1px 1px 12px;
+    padding: 1em;
+    background: white;
+    left: 30em;
+    top: 10em;
+    z-index: 3;
+}
+
+.profileDropdown {
+  position: absolute;
+  background-color: white;
+  border: 1px solid #ccc;
+  z-index: 3;
+}
+
+.brand{
+  font-size: x-large;
+  font-weight: bolder;
+  color: orangered;
+  margin: 1em;
+}
+
+.search{
+  margin-right: 0.5em;
 }
 
 /*loading globale*/
@@ -31,17 +69,63 @@ header{
   padding: 2em;
 }
 
-/*header Home*/
+/*error globale*/
 
-.brand{
-  font-size: x-large;
-  font-weight: bolder;
-  color: orangered;
+/*header List*/
+
+.settings{
+  display: inline-flex;
+  background-color: white;
+  color: black;
 }
 
-.search{
-  margin-right: 0.5em;
+.settings button{
+  border: none;
+  background-color: white;
 }
+
+.profile{
+  border: none;
+  border-radius: 15px;
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
+  padding-right: 1em;
+  padding-left: 1em;
+}
+
+.profileDropdown{
+  position: absolute;
+}
+
+.profileDropdown ul{
+  position: absolute;
+    background-color: white;
+    padding: 1em;
+    margin: 0;
+    z-index: 3;
+    box-shadow: 1px 1px 11px;
+    border-radius: 10px;
+    left: -2em;
+}
+
+.profileDropdown ul li{
+  list-style: none;
+}
+
+.guestPicker{
+  background-color: white;
+  color: black;
+  position: absolute;
+  z-index: 3;
+  padding: 1em;
+  box-shadow: 1px 1px 6px;
+}
+
+.guestPicker button{
+  background-color: white;
+  margin: 0.5em;
+}
+
 
 /*main globale*/
 
@@ -51,6 +135,18 @@ main{
 }
 
 /*main Home*/
+
+.imgCopertina{
+  background-image: url(./img/backgourn\ titolo.jpg);
+}
+
+.titlePrimary{
+  background-color: white;
+  margin-left: 2em;
+  margin-right: 2em;
+  padding: 1em;
+  border-radius: 10px;
+}
 
 .data{
   position: absolute;
@@ -139,7 +235,11 @@ e con l'indez 1 per non contrastare il form, se fosse superiore a questul'timo n
   justify-content: center;
   display: inline-flex;
   flex-wrap: wrap;
-  margin: 1em;
+  margin-top: 1em;
+  margin-left: 3em;
+  margin-right: 3em;
+  background-color: white;
+  border-radius: 10px;
 }
 
 .article{
@@ -170,59 +270,37 @@ e con l'indez 1 per non contrastare il form, se fosse superiore a questul'timo n
   margin-bottom: 2em;
 }
 
-/*header List*/
-
-.settings{
-  display: inline-flex;
-  background-color: white;
-  color: black;
+.bigSection {
+  padding: 20px;
 }
 
-.settings button{
-  border: none;
-  background-color: white;
+.card-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between; /* Aggiungi questo per una migliore distribuzione */
 }
 
-.profile{
-  border: none;
-  border-radius: 15px;
-  padding-top: 0.5em;
-  padding-bottom: 0.5em;
-  padding-right: 1em;
-  padding-left: 1em;
+.card-wrapper {
+  flex: 1 1 100%; /* Imposta a 100% per smartphone */
+  margin: 10px;
 }
 
-.profileDropdown{
-  position: absolute;
+@media (min-width: 576px) {
+  .card-wrapper {
+      flex: 1 1 calc(50% - 20px); /* 2 cards per riga su tablet */
+  }
 }
 
-.profileDropdown ul{
-  position: absolute;
-    background-color: white;
-    padding: 1em;
-    margin: 0;
-    z-index: 3;
-    box-shadow: 1px 1px 11px;
-    border-radius: 10px;
-    left: -2em;
+@media (min-width: 768px) {
+  .card-wrapper {
+      flex: 1 1 calc(33.33% - 20px); /* 3 cards per riga su laptop */
+  }
 }
 
-.profileDropdown ul li{
-  list-style: none;
-}
-
-.guestPicker{
-  background-color: white;
-  color: black;
-  position: absolute;
-  z-index: 3;
-  padding: 1em;
-  box-shadow: 1px 1px 6px;
-}
-
-.guestPicker button{
-  background-color: white;
-  margin: 0.5em;
+@media (min-width: 1200px) {
+  .card-wrapper {
+      flex: 1 1 calc(25% - 20px); /* 4 cards per riga su laptop */
+  }
 }
 
 /*main List*/
@@ -234,14 +312,6 @@ e con l'indez 1 per non contrastare il form, se fosse superiore a questul'timo n
   cursor: pointer;
 }
 
-.card{
-  width: 30%;
-}
-
-.card img {
-  width: 30%;
-}
-
 /*main Dettaglio*/
 
 .imageProduct{
@@ -251,6 +321,8 @@ e con l'indez 1 per non contrastare il form, se fosse superiore a questul'timo n
 .imageProduct img{
   height: 200px;
 }
+
+/*main favoriti*/
 
 /*footer*/
 

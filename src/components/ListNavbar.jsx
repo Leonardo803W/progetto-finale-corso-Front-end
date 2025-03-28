@@ -8,7 +8,7 @@ class ListNavbar extends Component {
   constructor(props) {
     super(props);
 
-    //inizializzo le variabili
+    //inizializzazione variabili
     
     this.state = {
       country: '',

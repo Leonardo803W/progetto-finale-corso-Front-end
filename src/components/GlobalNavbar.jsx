@@ -1,9 +1,12 @@
 import React, { Component } from "react";
 import "react-datepicker/dist/react-datepicker.css";
 import { Link } from "react-router-dom";
-import axios from "axios"; // Make sure to install axios for making HTTP requests
+import axios from "axios";
 
 class GlobalNavbar extends Component {
+
+  //inizializzazione variabili
+
   constructor(props) {
     super(props);
 
@@ -17,20 +20,36 @@ class GlobalNavbar extends Component {
       isAuthenticated: false,
     };
 
+    //utilizzo il ref per poter prendere i valori direttamente dal MOD
+
     this.profileDropdownRef = React.createRef();
   }
 
+  //funzione per aprire la tenda del profilo
+
   toggleProfileDropdown = () => {
+    
     this.setState((prevState) => ({ isProfileDropdownOpen: !prevState.isProfileDropdownOpen }));
   };
 
-  handleClickOutside = (event) => {
-    if (this.profileDropdownRef.current && !this.profileDropdownRef.current.contains(event.target)) {
-      this.setState({ isProfileDropdownOpen: false });
-    }
-  };
 
+  //funzione che ascolta i click nel momento che il componente viene montato
+
+  componentDidMount() {
+
+    document.addEventListener('click', this.handleClickOutside);
+  }
+
+  //funzione che ascolta i click nel momento che il componente viene smontato
+
+  componentWillUnmount() { 
+
+    document.removeEventListener('click', this.handleClickOutside);
+  }
+
+  //sistemare meglio
   openModal = (isRegisterMode = false) => {
+
     this.setState({ isModalOpen: true, isRegisterMode });
   };
 
@@ -68,15 +87,28 @@ class GlobalNavbar extends Component {
     this.setState({ isAuthenticated: false });
   };
 
-  render() {
-    const { isProfileDropdownOpen, isModalOpen, isRegisterMode, isAuthenticated } = this.state;
+  openModal = (isRegisterMode = false) => {
+    // Close the profile dropdown when opening the modal
+    this.setState({ isModalOpen: true, isRegisterMode, isProfileDropdownOpen: false });
+  };
+  //sistemare meglio
 
+  
+  render() {
+
+    //renderizzazione delle variabili
+
+    const { isProfileDropdownOpen, isModalOpen, isRegisterMode, isAuthenticated } = this.state;
+  
     return (
+      <>
+      {/* Logo Icon */}
       <section className="d-inline-flex justify-content-between w-100 pe-4 ps-4 align-items-center">
         <Link to={"/"}>
-          <div className="brand">Viaggi di Passione</div>
+          <div className = "brand">Viaggi di Passione</div>
         </Link>
-
+  
+        {/* search button */}
         <Link to={"/list"}>
           <button>
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="search" viewBox="0 0 16 16">
@@ -85,19 +117,20 @@ class GlobalNavbar extends Component {
             Vuoi passare direttamente alla ricerca?
           </button>
         </Link>
-
+  
         <button className="profile" onClick={this.toggleProfileDropdown} ref={this.profileDropdownRef}>
           {/* Profile Icon */}
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-person-circle" viewBox="0 0 16 16">
             <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0" />
             <path fillRule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1" />
           </svg>
-
-          {isProfileDropdownOpen && (
+  
+          {/* Profile info */}
+          {isProfileDropdownOpen && !isModalOpen && (
             <div className="profileDropdown">
               <ul>
                 {!isAuthenticated ? (
-                  <li onClick={() => this.openModal(false)}>Log in</li>
+                  <li onClick={() => this.openModal(false)}>Login</li>
                 ) : (
                   <>
                     <li><Link to="/settings">Impostazioni</Link></li>
@@ -109,11 +142,14 @@ class GlobalNavbar extends Component {
             </div>
           )}
         </button>
-
-        {isModalOpen && (
+      </section>
+      
+      {/* register or login */}
+      {isModalOpen && (
           <div className="modal-overlay">
             <div className="modal-content">
               <h2>{isRegisterMode ? "Registrati" : "Accedi"}</h2>
+              
               <form onSubmit={this.handleAuthSubmit}>
                 <input
                   type="text"
@@ -144,13 +180,14 @@ class GlobalNavbar extends Component {
                 <button type="submit">{isRegisterMode ? "Registrati" : "Accedi"}</button>
                 <button type="button" onClick={this.closeModal}>Chiudi</button>
               </form>
+
               <button onClick={() => this.openModal(!isRegisterMode)}>
                 {isRegisterMode ? "Hai già un account? Accedi" : "Non hai un account? Registrati"}
               </button>
             </div>
           </div>
         )}
-      </section>
+      </>
     );
   }
 }
