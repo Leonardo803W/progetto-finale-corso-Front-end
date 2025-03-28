@@ -6,67 +6,41 @@ npm install
 
 npm start
 
+Ricordare!! di eseguire questi comandi all'interno della cartella della applicazione React per installare le librerie nel contesto corretto.
+
 ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
-dipendenze utilizzate lato back-end:
+dipendenze utilizzate lato Front-end:
 
-1. spring-boot-starter-data-jpa
-Link: https://spring.io/projects/spring-data-jpa
-Scopo: Fornire supporto per l'integrazione di JPA (Java Persistence API) con Spring, 
-        rendendo più semplice la gestione delle operazioni di accesso ai dati e la configurazione delle entità.
+1. React
+Link Documentation: https://react.dev/learn
+Installazione: npm install react react-dom
+Scopo: React è una libreria JavaScript per costruireinterfacce utente. Permette di creare componenti riutilizzabili e gestire lo stato in modo efficiente.
 
-2. spring-boot-starter-web
-Link: https://spring.io/projects/spring-framework#overview
-Scopo: Fornire le funzionalità necessarie per costruire applicazioni web, incluse RESTful APIs, utilizzando Spring MVC.
+2. React Router DOM
+Link Documentation: https://reactrouter.com
+Installazione: npm install react-router-dom
+Scopo: React Router è una libreria per il routing in applicazioni React. Permette di navigare tra diverse schermate e gestire la storia della navigazione.
 
-3. spring-boot-starter-validation
-Link: https://spring.io/projects/spring-framework#overview
-Scopo: Aggiunge la validazione dei dati alle applicazioni Spring utilizzando Hibernate Validator o altre implementazioni della Bean Validation.
+3. Bootstrap
+Link Documentation: getbootstrap.com/docs/
+Installazione: npm install bootstrap
+Scopo: Bootstrap è un framework CSS per lo sviluppo di siti web e applicazioni responsive. Fornisce stili predefiniti e componenti per rendere più semplice la creazione di interfacce utente.
 
-4. cloudinary-http44
-Link: https://cloudinary.com/documentation/java_integration
-Scopo: Fornire un SDK per l'integrazione con Cloudinary, un servizio di gestione delle immagini e dei video, per caricare, archiviare e gestire media.
+4. React DatePicker
+Link Documentation: https://reactdatepicker.com
+Installazione: npm install react-datepicker
+Scopo: React DatePicker è un componente per la selezione di date. Permette di selezionare date in modo interattivo all'interno delle applicazioni React.
 
-5. spring-boot-starter-mail
-Link: https://spring.io/projects/spring-boot
-Scopo: Fornire supporto per l'invio di email nelle applicazioni Spring Boot utilizzando JavaMail.
+5. Axios
+Link Documentation: https://axios-http.com/docs/intro
+Installazione: npm install axios
+Scopo: Axios è una libreria per effettuare richieste HTTP. È usata per comunicare con API e recuperare dati dal server.
 
-6. javafaker
-Link: https://github.com/DiUS/java-faker
-Scopo: Genera dati falsi per testare applicazioni, utile per popolare database o generare dati per demo.
+6. React Bootstrap
+Link Documentation: https://react-bootstrap.github.io
+Installazione: npm install react-bootstrap
+Scopo: React Bootstrap è una libreria che integra Bootstrap con React. Fornisce componenti Bootstrap come componenti React, facilitando l'uso di Bootstrap in applicazioni React.
+Esempio di Installazione Completa
 
-7. springdoc-openapi-starter-webmvc-ui
-Link: https://springdoc.org
-Scopo: Fornire un modo per generare automaticamente documentazione OpenAPI per le API RESTful create con Spring MVC.
-
-8. postgresql
-Link: https://jdbc.postgresql.org
-Scopo: Driver JDBC per connettersi a database PostgreSQL, utilizzato in applicazioni Java per l'accesso ai dati.
-
-9. lombok
-Link: https://objectcomputing.com/resources/publications/sett/january-2010-reducing-boilerplate-code-with-project-lombok
-Scopo: Riduce il boilerplate nel codice Java generando automaticamente metodi come getter, setter, e costruttori.
-
-10. spring-boot-starter-test
-Link: https://spring.io/projects/spring-boot
-Scopo: Fornire strumenti e librerie per il testing delle applicazioni Spring Boot, inclusi JUnit, Mockito e AssertJ.
-
-11. Spring Boot Starter Security
-Link: https://docs.spring.io/spring-boot/redirect.html#boot-features-security
-Scopo: Questa dipendenza fornisce un supporto di base per la sicurezza nelle applicazioni Spring Boot, integrando Spring Security. Abilita la protezione di base delle risorse e offre configurazioni predefinite per l'autenticazione e l'autorizzazione.
-
-12. JJWT API
-Link: https://github.com/jwtk/jjwt
-Scopo: Questa libreria fornisce un'API semplice e intuitiva per la creazione e la verifica di JSON Web Tokens (JWT). Può essere utilizzata per gestire l'autenticazione e l'autorizzazione nelle applicazioni.
-
-13. JJWT Implementation
-Link: https://github.com/jwtk/jjwt
-Scopo: Questa libreria fornisce l'implementazione effettiva dell'API JJWT. È necessaria per gestire la logica di creazione e parsing dei JWT.
-
-14. JJWT Jackson
-Link: https://github.com/jwtk/jjwt
-Scopo: Questa dipendenza fornisce il supporto per la serializzazione e deserializzazione dei JWT utilizzando Jackson, una popolare libreria per la manipolazione di JSON in Java.
-
-15. Spring Security Test
-Link: https://docs.spring.io/spring-security/reference/
-Scopo: Questa dipendenza fornisce strumenti e utility per testare la sicurezza nelle applicazioni Spring. Include funzionalità per simulare l'autenticazione e l'autorizzazione durante i test.
+ 
