@@ -67,7 +67,10 @@ const HomeContinents = () => {
                                     <p>
                                         {country.descriptions}
                                     </p>
-                                    <Link to='/list'>
+                                    <Link to={{
+                                        pathname: '/list',
+                                        state: { title: country.title }
+                                    }}>
                                         <Button variant="primary">Prenota e vola!</Button>
                                     </Link>
                                 </Card.Body>

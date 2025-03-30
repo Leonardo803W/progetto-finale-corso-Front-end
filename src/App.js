@@ -6,6 +6,8 @@ import SchermataHome from './components/SchermataHome';
 import SchermataList from './components/SchermataList';
 import SchermataDettaglio from './components/SchermataDettaglio';
 import SchermataFavoriti from './components/SchermataFavoriti';
+import SchermataCreazione from './components/SchermataCreazione';
+import SchermataPrenotazioni from './components/SchermataPrenotazioni';
 
 function App() {
 
@@ -17,7 +19,9 @@ function App() {
           <Route path = "/" element = {<SchermataHome />} />
           <Route path = "list" element = {<SchermataList />} />
           <Route path="/dettaglio/:id" element={<SchermataDettaglio />} />
-          <Route path="/favoriti" element={<SchermataFavoriti />} />
+          <Route path="/preferiti" element={<SchermataFavoriti />} />
+          <Route path="/create" element={<SchermataCreazione />} />
+          <Route path="/prenotazioni" element={<SchermataPrenotazioni />} />
         </Routes>
       </BrowserRouter>
     

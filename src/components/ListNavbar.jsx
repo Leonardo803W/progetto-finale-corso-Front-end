@@ -7,42 +7,29 @@ class ListNavbar extends Component {
 
   constructor(props) {
     super(props);
-
-    //inizializzazione variabili
-    
     this.state = {
-      country: '',
       startDate: null,
       endDate: null,
       isStartDatePickerOpen: false,
       isEndDatePickerOpen: false,
       isGuestPickerOpen: false,
-      isProfileDropdownOpen: false,
-      adults: 0,
-      children: 0,
+      isProfileDown: false,
+      autenticate: false,
+      isUserLoggedIn: false,
+      isAlertOpenBye: false,
     };
 
-    //utilizzo il ref per poter prendere i valori direttamente dal MOD
-    //utilizzo DatePicker per avere un calendario gia personalizzato con del css e funzionante
-    
-    this.startDatePickerRef = React.createRef();
-    this.endDatePickerRef = React.createRef();
-    this.guestPickerRef = React.createRef();
-    this.profileDropdownRef = React.createRef();
+    console.log(props)
   }
 
-  //funzione per aprire la tenda per selezionare la data di chek-in
-
   handleStartDateChange = (date) => {
-
     this.setState({ startDate: date, isStartDatePickerOpen: false });
+    this.props.setChekIn(date); // Passa la data di check-in al genitore
   };
 
-  //funzione per aprire la tenda per selezionare la data di chek-out
-
   handleEndDateChange = (date) => {
-
     this.setState({ endDate: date, isEndDatePickerOpen: false });
+    this.props.setCheckOut(date); // Passa la data di check-out al genitore
   };
 
   //funzione per la chiusura della tend del chek-in
@@ -77,33 +64,42 @@ class ListNavbar extends Component {
   toggleProfileDropdown = () => {
 
     this.setState((prevState) => ({
-      isProfileDropdownOpen: !prevState.isProfileDropdownOpen,
+      isProfileDown: !prevState.isProfileDown,
     }));
   };
 
-  //funzione per chiudere le tende nel momento che si clicca al di fuori di esse
+  //funzione per il log out che rimuove il token dato 
 
-  handleClickOutside = (event) => {
+  handleLogout = () => {
 
-    if (this.startDatePickerRef.current && !this.startDatePickerRef.current.contains(event.target) &&
-        this.endDatePickerRef.current && !this.endDatePickerRef.current.contains(event.target) &&
-        this.guestPickerRef.current && !this.guestPickerRef.current.contains(event.target) &&
-        this.profileDropdownRef.current && !this.profileDropdownRef.current.contains(event.target)) 
-    {
-      this.setState({
-        isStartDatePickerOpen: false,
-        isEndDatePickerOpen: false,
-        isGuestPickerOpen: false,
-        isProfileDropdownOpen: false,
-      });
-    }
+    localStorage.removeItem("isAdmin")
+    localStorage.removeItem("token"); // Clear token
+    this.setState({ autenticate: false, isUserLoggedIn: false }); // Reset admin state
+
+    this.setState({ isAlertOpenBye: true });
+
+      // Chiudi l'alert dopo 3 secondi
+      setTimeout(() => {
+          this.setState({ isAlertOpenBye: false });
+      }, 3000);
   };
 
-  //funzione che ascolta i click nel momento che il componente viene montato
+  componentDidMount() {
+    document.addEventListener('click', this.handleClickOutside);
+
+    // Controlla se l'utente è loggato
+    const token = localStorage.getItem('token');
+
+    this.setState({ isUserLoggedIn: !!token, autenticate: true });
+  }
 
   componentDidMount() {
-
     document.addEventListener('click', this.handleClickOutside);
+
+    // Controlla se l'utente è loggato
+    const isAdmin = localStorage.getItem('isAdmin');
+
+    this.setState({ autenticateAdmin: isAdmin, autenticate: true });
   }
 
   //funzione che ascolta i click nel momento che il componente viene smontato
@@ -116,118 +112,96 @@ class ListNavbar extends Component {
   //funzioni per incrementare e diminuire il numero di ospiti
 
   incrementAdults = () => {
-
-    this.setState((prevState) => ({ adults: prevState.adults + 1 }));
+    this.props.setAdulti(this.props.adulti + 1); // Aggiorna il numero di adulti
   };
 
   decrementAdults = () => {
-
-    this.setState((prevState) => ({ adults: Math.max(prevState.adults - 1, 0) }));
+    this.props.setAdulti(Math.max(this.props.adulti - 1, 0)); // Aggiorna il numero di adulti
   };
 
   incrementChildren = () => {
-
-    this.setState((prevState) => ({ children: prevState.children + 1 }));
+    this.props.setBambini(this.props.bambini + 1); // Aggiorna il numero di bambini
   };
 
   decrementChildren = () => {
+    this.props.setBambini(Math.max(this.props.bambini - 1, 0)); // Aggiorna il numero di bambini
+  };
 
-    this.setState((prevState) => ({ children: Math.max(prevState.children - 1, 0) }));
+  handleSearch = () => {
+    this.props.onSearch(); // Call the search method passed from SchermataList
+  };
+
+  resetFilters = () => {
+      this.props.onReset(); // Call the reset method passed from SchermataList
   };
 
   render() {
 
     //renderizzazione delle variabili
-
-    const { startDate, endDate, isStartDatePickerOpen, isEndDatePickerOpen, isGuestPickerOpen, isProfileDropdownOpen, adults, children } = this.state;
-
+    const { title, dove, setDove } = this.props;
+    const { autenticate, isUserLoggedIn, isAlertOpenBye } = this.state;
+    
     return (
-      <section className="d-inline-flex justify-content-between w-100 pe-4 ps-4 align-items-center">
+      <section className="listNavbar">
         <Link to={"/"}>
           <div className="brand">Viaggi Passione</div>
         </Link>
 
         <div className="settings">
           <button>
-            <label className='d-block pb-2 pe-2'>dove</label>
-            <input 
-              type="text" 
-              className = 'p-2 border-0' 
-              placeholder = "stato, paese o nazione"
-            />
-          </button>
+              <label className='d-block pb-2 pe-2'>dove</label>
+              <input 
+                type="text" 
+                className='p-2 border-0' 
+                placeholder="stato, paese o nazione"
+                value={dove}
+                            onChange={(e) => setDove(e.target.value)} // Update state on input change
+              />
+            </button>
 
           <div ref={this.startDatePickerRef}>
             <label className='d-block pb-2 pe-2'>check-in</label>
-            <button type="button" onClick={this.toggleStartDatePicker} className='p-2 border-0'>
-              {startDate ? startDate.toLocaleDateString() : 'Seleziona data'}
+            <button onClick={this.toggleStartDatePicker}>
+            {this.state.startDate? this.state.startDate.toLocaleDateString() : 'Seleziona data'}
             </button>
-            {isStartDatePickerOpen && (
-              <div className="data">
-                <DatePicker
-                  selected={startDate}
-                  onChange={this.handleStartDateChange}
-                  minDate={new Date()}
-                  inline
-                />
-              </div>
+            {this.state.isStartDatePickerOpen && (
+              <DatePicker
+                selected={this.state.startDate}
+                onChange={this.handleStartDateChange}
+                minDate={new Date()}
+                inline 
+                
+              />
             )}
           </div>
 
           <div ref={this.endDatePickerRef}>
             <label className='d-block pb-2 pe-2'>check-out</label>
-            <button type="button" onClick={this.toggleEndDatePicker} className='p-2 border-0' disabled={!startDate}>
-              {endDate ? endDate.toLocaleDateString() : 'Seleziona data'}
+            <button onClick={this.toggleEndDatePicker} disabled={!this.state.startDate}>
+            {this.state.endDate ? this.state.endDate.toLocaleDateString() : 'Seleziona data'}
             </button>
-            {isEndDatePickerOpen && (
-              <div className="data">
-                <DatePicker
-                  selected={endDate}
-                  onChange={this.handleEndDateChange}
-                  minDate={startDate ? new Date(startDate) : new Date()}
-                  inline
-                />
-              </div>
+            {this.state.isEndDatePickerOpen && (
+              <DatePicker
+                selected={this.state.endDate}
+                onChange={this.handleEndDateChange}
+                minDate={this.state.startDate ? new Date(this.state.startDate) : new Date()}
+                inline
+              />
             )}
           </div>
 
-          <div ref={this.guestPickerRef}>
-            <label className='d-block pb-2 pe-2'>chi</label>
-            <button type="button" onClick={this.toggleGuestPicker} className='p-2 border-0'>
-              {adults + children > 0 ? `${adults} adulti, ${children} bambini` : 'Seleziona ospiti'}
-            </button>
-            {isGuestPickerOpen && (
-              <div className="guestPicker">
-                <div>
-                  <label className="p-1">Adulti</label>
-                  <button onClick={this.decrementAdults}>-</button>
-                  <span>{adults}</span>
-                  <button onClick={this.incrementAdults}>+</button>
-                </div>
-                <hr />
-                <div>
-                  <label>Bambini</label>
-                  <button onClick={this.decrementChildren}>-</button>
-                  <span>{children}</span>
-                  <button onClick={this.incrementChildren}>+</button>
-                </div>
-              </div>
-            )}
+          {/* Selettore per Ospiti */}
+          <div>
+            <button onClick={this.decrementAdults}>-</button>
+            <span>{this.props.adulti}</span>
+            <button onClick={this.incrementAdults}>+</button>
+            <button onClick={this.decrementChildren}>-</button>
+            <span>{this.props.bambini}</span>
+            <button onClick={this.incrementChildren}>+</button>
           </div>
 
-          <button>
-            <svg 
-                xmlns="http://www.w3.org/2000/svg" 
-                width="16" 
-                height="16" 
-                fill="currentColor" 
-                className="search"
-                viewBox="0 0 16 16" 
-                >
-                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
-            </svg>
-        </button>
-
+          <button onClick={this.handleSearch}>Cerca</button>
+          <button onClick={this.resetFilters}>Reset</button>
         </div>
 
         <button className="profile" onClick={this.toggleProfileDropdown} ref={this.profileDropdownRef}>
@@ -240,23 +214,48 @@ class ListNavbar extends Component {
               <path fillRule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"/>
             </svg>
 
-            {isProfileDropdownOpen && (
-              <div className = "profileDropdown">
+            {this.state.isProfileDown && (
+              <div className="profileDropdown">
                 <ul>
-                  <li>Il mio profilo</li>
-                  <li>Impostazioni</li>
-                  <Link to = {"/favoriti"}
-                    className = "link"
-                  > 
-                    <li>Preferiti</li>
-                  </Link>
-                  <li>Logout</li>
+                  {!autenticate ? (
+                    <>
+                    <Link to = "/" >
+                    <li>non sei ancora registrato? <span>registrati!</span></li>
+                    </Link>
+                    </>
+                    ) : (
+                      <>
+                        {isUserLoggedIn ? (
+                          <>
+                            <li><Link to="/prenotazioni">prenotazioni</Link></li>
+                            <li><Link to="/preferiti">Preferiti</Link></li>
+                            <li onClick={this.handleLogout}>Logout</li>
+                          </>
+                        ) : (
+                          <>
+                            <li><Link to="/create">Creazione</Link></li>
+                            <li onClick={this.handleLogout}>Logout</li>
+                          </>
+                        )}
+                      </>
+                    )
+                  }
                 </ul>
               </div>
             )}
         </button>
 
+        {isAlertOpenBye && ( 
+        <div className="alertLoginRegister">
+          <h4>Hey, see you agein</h4>
+            <p>
+               "Logout effetuato con sucesso!!"
+            </p>
+        </div>
+        )}
+
       </section>
+      
     );
   }
 }

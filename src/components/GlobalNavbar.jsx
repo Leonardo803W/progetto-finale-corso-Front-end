@@ -5,19 +5,24 @@ import axios from "axios";
 
 class GlobalNavbar extends Component {
 
-  //inizializzazione variabili
+  //inizializzazione variabili 
 
   constructor(props) {
     super(props);
 
     this.state = {
+
+      isAlertOpenBye: false,
+      isAlertOpen: false,
       isProfileDropdownOpen: false,
       isModalOpen: false,
       isRegisterMode: false,
       username: '',
       password: '',
       email: '',
+      adminCode: '',
       isAuthenticated: false,
+      isAdmin: false,
     };
 
     //utilizzo il ref per poter prendere i valori direttamente dal MOD
@@ -25,19 +30,34 @@ class GlobalNavbar extends Component {
     this.profileDropdownRef = React.createRef();
   }
 
-  //funzione per aprire la tenda del profilo
+  //funzione per aprire la tenda del profileDropdown
 
   toggleProfileDropdown = () => {
-    
+
     this.setState((prevState) => ({ isProfileDropdownOpen: !prevState.isProfileDropdownOpen }));
   };
 
+  //funzione per chiudere le tende nel momento che si clicca al di fuori di esse
+
+  handleClickOutside = (event) => {
+
+    if (this.profileDropdownRef.current && !this.profileDropdownRef.current.contains(event.target) ) 
+    {
+      this.setState({
+
+        isProfileDropdownOpen: false,
+      });
+    }
+  };
 
   //funzione che ascolta i click nel momento che il componente viene montato
 
   componentDidMount() {
 
     document.addEventListener('click', this.handleClickOutside);
+    // Controlla se l'utente è loggato
+    const token = localStorage.getItem('token');
+    this.setState({ isAuthenticated: !!token });
   }
 
   //funzione che ascolta i click nel momento che il componente viene smontato
@@ -47,109 +67,161 @@ class GlobalNavbar extends Component {
     document.removeEventListener('click', this.handleClickOutside);
   }
 
-  //sistemare meglio
-  openModal = (isRegisterMode = false) => {
+  //funzione per aprire la tenda modal per la registrazione o il login
 
-    this.setState({ isModalOpen: true, isRegisterMode });
+  openModal = (isRegisterMode = false, isAdminMode = false) => {
+
+    this.setState({ isModalOpen: true, isRegisterMode, isAdmin: isAdminMode });
   };
+
+  //funzione per chiudere la tenda modal azzerando di default le variabili e il loro valore
 
   closeModal = () => {
-    this.setState({ isModalOpen: false, username: '', password: '', email: '' });
+
+    this.setState({ isModalOpen: false, username: '', password: '', email: '', adminCode: '' });
   };
 
+  //funzione per il log out che rimuove il token dato 
+
+  handleLogout = () => {
+
+    localStorage.removeItem("token"); // Clear token
+    this.setState({ isAuthenticated: false, isAdmin: false }); // Reset admin state
+
+    this.setState({ isAlertOpenBye: true });
+
+      // Chiudi l'alert dopo 3 secondi
+      setTimeout(() => {
+          this.setState({ isAlertOpenBye: false });
+      }, 3000);
+  };
+
+  //funzione per cambiare gli input di registrazione e di login
+
   handleInputChange = (event) => {
+
     this.setState({ [event.target.name]: event.target.value });
   };
 
   handleAuthSubmit = (event) => {
     event.preventDefault();
-    const { isRegisterMode, username, password, email } = this.state;
+    const { isRegisterMode, username, password, email, adminCode, isAdmin } = this.state;
 
-    const endpoint = isRegisterMode ? '/api/auth/register' : '/api/auth/login';
-    const data = isRegisterMode ? { username, password, email } : { username, password };
+    let endpoint = isRegisterMode ? 'http://localhost:8080/api/auth/register' : 'http://localhost:8080/api/auth/login';
+    let data = isRegisterMode ? { username, password, email } : { username, password };
+
+    if (isAdmin) {
+        if (adminCode !== 'leo') {
+            alert('Invalid admin code');
+            return;
+        }
+        data.adminCode = adminCode; // Include admin code in the data
+        endpoint = 'http://localhost:8080/api/auth/admin-login'; // Assuming you have a separate endpoint for admin login
+    }
 
     axios.post(endpoint, data)
-      .then(response => {
-        if (!isRegisterMode) {
-          // Assume the response contains a token for successful login
+        .then(response => {
+
           localStorage.setItem("token", response.data.token); // Store token
-          this.setState({ isAuthenticated: true });
-        }
-        this.closeModal();
-      })
-      .catch(error => {
-        console.error("Authentication error", error);
-      });
-  };
+          localStorage.setItem("isAdmin", isAdmin); // Save admin status
+          this.setState({ isAuthenticated: true, isAdmin: isAdmin, isAlertOpen: true }); // Set admin state and alert
+          this.closeModal();
+          this.setState({ isAlertOpen: true });
 
-  handleLogout = () => {
-    localStorage.removeItem("token"); // Clear token
-    this.setState({ isAuthenticated: false });
-  };
+            // Chiudi l'alert dopo 3 secondi
+            setTimeout(() => {
+                this.setState({ isAlertOpen: false });
+            }, 3000);
+        })
+        .catch(error => {
+            console.error("Authentication error", error);
+        });
+};
 
-  openModal = (isRegisterMode = false) => {
-    // Close the profile dropdown when opening the modal
-    this.setState({ isModalOpen: true, isRegisterMode, isProfileDropdownOpen: false });
-  };
-  //sistemare meglio
-
-  
   render() {
+    const { isProfileDropdownOpen, isModalOpen, isRegisterMode, isAuthenticated, isAdmin, isAlertOpen, isAlertOpenBye } = this.state;
 
-    //renderizzazione delle variabili
-
-    const { isProfileDropdownOpen, isModalOpen, isRegisterMode, isAuthenticated } = this.state;
-  
     return (
       <>
-      {/* Logo Icon */}
-      <section className="d-inline-flex justify-content-between w-100 pe-4 ps-4 align-items-center">
-        <Link to={"/"}>
-          <div className = "brand">Viaggi di Passione</div>
-        </Link>
-  
-        {/* search button */}
-        <Link to={"/list"}>
-          <button>
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="search" viewBox="0 0 16 16">
-              <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
+        {/* Logo Icon */}
+        <section className="d-inline-flex justify-content-between w-100 pe-4 ps-4 align-items-center">
+          <Link to={"/"}>
+            <div className="brand">Viaggi di Passione</div>
+          </Link>
+
+          {/* search button */}
+          <Link to={"/list"}>
+            <button>
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="search" viewBox="0 0 16 16">
+                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
+              </svg>
+              Vuoi passare direttamente alla ricerca?
+            </button>
+          </Link>
+
+          <button className="profile" onClick={this.toggleProfileDropdown} ref={this.profileDropdownRef}>
+            {/* Profile Icon */}
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-person-circle" viewBox="0 0 16 16">
+              <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0" />
+              <path fillRule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1" />
             </svg>
-            Vuoi passare direttamente alla ricerca?
+
+            {/* Profile info */}
+            {isProfileDropdownOpen && !isModalOpen && (
+              <div className="profileDropdown">
+                <ul>
+                  {!isAuthenticated ? (
+                    <>
+                      <li onClick={() => this.openModal(false)}>Login</li>
+                      <li onClick={() => this.openModal(false, true)}>Admin Login</li>
+                    </>
+                  ) : (
+                    <>
+                      {isAdmin ? (
+                        <>
+                          <li><Link to="/create">Creazione</Link></li>
+                          <li onClick={this.handleLogout}>Logout</li>
+                        </>
+                      ) : (
+                        <>
+                          <li>Il mio profilo</li>
+                          <li><Link to="/preferiti">Preferiti</Link></li>
+                          <li><Link to="/prenotazioni">prenotazioni</Link></li>
+                          <li onClick={this.handleLogout}>Logout</li>
+                        </>
+                      )}
+                    </>
+                  )}
+                </ul>
+              </div>
+            )}
           </button>
-        </Link>
-  
-        <button className="profile" onClick={this.toggleProfileDropdown} ref={this.profileDropdownRef}>
-          {/* Profile Icon */}
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-person-circle" viewBox="0 0 16 16">
-            <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0" />
-            <path fillRule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1" />
-          </svg>
-  
-          {/* Profile info */}
-          {isProfileDropdownOpen && !isModalOpen && (
-            <div className="profileDropdown">
-              <ul>
-                {!isAuthenticated ? (
-                  <li onClick={() => this.openModal(false)}>Login</li>
-                ) : (
-                  <>
-                    <li><Link to="/settings">Impostazioni</Link></li>
-                    <li><Link to="/favorites">Preferiti</Link></li>
-                    <li onClick={this.handleLogout}>Logout</li>
-                  </>
-                )}
-              </ul>
-            </div>
-          )}
-        </button>
-      </section>
-      
-      {/* register or login */}
-      {isModalOpen && (
+        </section>
+
+        {isAlertOpen && ( 
+        <div className="alertLoginRegister">
+          <h4>Hey, nice to see you</h4>
+            <p>
+               "accesso effetuato con sucesso!!"
+            </p>
+        </div>
+        )}
+
+        {isAlertOpenBye && ( 
+        <div className="alertLoginRegister">
+          <h4>Hey, see you agein</h4>
+            <p>
+               "Logout effetuato con sucesso!!"
+            </p>
+        </div>
+        )}
+
+        {/* Register or login */}
+        {isModalOpen && (
           <div className="modal-overlay">
             <div className="modal-content">
-              <h2>{isRegisterMode ? "Registrati" : "Accedi"}</h2>
-              
+              <h2>{isRegisterMode ? "Registrati" : "Accedi" }</h2>
+
               <form onSubmit={this.handleAuthSubmit}>
                 <input
                   type="text"
@@ -177,6 +249,16 @@ class GlobalNavbar extends Component {
                   onChange={this.handleInputChange}
                   required
                 />
+                {isAdmin && (
+                  <input
+                    type="text"
+                    name="adminCode"
+                    placeholder="Admin Code"
+                    value={this.state.adminCode}
+                    onChange={this.handleInputChange}
+                    required
+                  />
+                )}
                 <button type="submit">{isRegisterMode ? "Registrati" : "Accedi"}</button>
                 <button type="button" onClick={this.closeModal}>Chiudi</button>
               </form>

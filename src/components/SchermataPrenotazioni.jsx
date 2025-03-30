@@ -1,8 +1,8 @@
 import GlobalNavbar from './GlobalNavbar';
-import Mainpreferiti from './Mainpreferiti';
+import MainPrenotazioni from './MainPrenotazioni';
 import MyFooter from './MyFooter';
 
-const SchermataFavoriti = () => {
+const SchermataPrenotazioni = () => {
 
     return(
         <>
@@ -12,10 +12,10 @@ const SchermataFavoriti = () => {
 
             <main>
                 <h2>
-                    I miei preferiti
+                    Le mie prenotazioni
                 </h2>
 
-                <Mainpreferiti/>
+                <MainPrenotazioni/>
             </main>
             
             <footer>
@@ -25,4 +25,4 @@ const SchermataFavoriti = () => {
     )
 }
 
-export default SchermataFavoriti;
+export default SchermataPrenotazioni;

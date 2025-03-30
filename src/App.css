@@ -60,6 +60,19 @@ header{
   margin-right: 0.5em;
 }
 
+.alertLoginRegister{
+  position: fixed;
+  z-index: 3;
+  background-color: #54ff54db;
+  width: 80%;
+  text-align: center;
+  left: 8em;
+  top: 7em;
+  padding: 1em;
+  color: #1f891f;
+  border-radius: 15px;
+}
+
 /*loading globale*/
 
 .caricamentoSchermata{
@@ -73,11 +86,42 @@ header{
 
 /*header List*/
 
+.listNavbar{
+  display: inline-grid;
+  justify-content: space-between;
+  width: 100%;
+  align-items: center;
+}
+
+@media (min-width: 768px) {
+  .listNavbar{
+    display: inline-flex;
+    justify-content: space-between;
+    width: 100%;
+    padding-left: 2em;
+    padding-right: 2em;
+    align-items: center;
+  }
+}
+
 .settings{
-  display: inline-flex;
+  order: 2;
+  display: flex;
   background-color: white;
   color: black;
+  align-items: center;
 }
+
+@media (min-width: 768px) {
+  .settings{
+    order: 0;
+    display: flex;
+    background-color: white;
+    color: black;
+    align-items: center;
+  }
+}
+
 
 .settings button{
   border: none;
@@ -99,17 +143,19 @@ header{
 
 .profileDropdown ul{
   position: absolute;
-    background-color: white;
-    padding: 1em;
-    margin: 0;
-    z-index: 3;
-    box-shadow: 1px 1px 11px;
-    border-radius: 10px;
-    left: -2em;
+  background-color: white;
+  padding: 1em;
+  margin: 0;
+  z-index: 3;
+  box-shadow: 1px 1px 11px;
+  border-radius: 10px;
+  left: -5em;
 }
 
 .profileDropdown ul li{
   list-style: none;
+  padding: 1em;
+  box-shadow: 0px 1px 4px;
 }
 
 .guestPicker{
@@ -149,8 +195,10 @@ main{
 }
 
 .data{
-  position: absolute;
   z-index: 3;
+  position: absolute;
+  background-color: white;
+  box-shadow: 1px 1px 6px;
 }
 
 .selection{
@@ -305,11 +353,72 @@ e con l'indez 1 per non contrastare il form, se fosse superiore a questul'timo n
 
 /*main List*/
 
-.preferitiImg{
-  position: absolute;
-  right: 1em;
-  top: 1em;
+.aggiornaCard{
+  position: fixed;
+  padding: 2em;
+  background: white;
+  z-index: 3;
+  box-shadow: 1px 1px 15px;
+  left: 38em;
+  top: 20em;
+}
+
+.eliminaCard{
+  position: fixed;
+  padding: 2em;
+  background: white;
+  z-index: 3;
+  box-shadow: 1px 1px 15px;
+  left: 46em;
+  top: 20em;
+}
+
+.cardCarosuel{
   cursor: pointer;
+    margin: 1em;
+    width: 100%;
+    box-shadow: -7px 5px 14px;
+    padding-bottom: 1em;
+}
+
+.imgCopertina{
+  height: 200px;
+  width: 100%;
+}
+
+.preferitiImg{
+  right: 0em;
+  top: 0em;
+  cursor: pointer;
+  color: black;
+  padding: 1em;
+  z-index: 2;
+}
+
+.card{
+  margin-top: 2em;
+  margin-bottom: 2em;
+}
+
+.card p{
+  margin: 0;
+  padding: 0.5em;
+}
+
+.card h3{
+  margin: 0;
+  padding: 0.5em;
+}
+
+.card button{
+  border-radius: 10px;
+  background-color: #63e3fd;
+  color: white;
+  border-color: #36ff93;
+}
+
+.card:hover {
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.3); /* Optional: a different shadow on hover */
 }
 
 /*main Dettaglio*/
@@ -322,7 +431,39 @@ e con l'indez 1 per non contrastare il form, se fosse superiore a questul'timo n
   height: 200px;
 }
 
+/*main Create*/
+
+.backgroundCreate{
+  background-image: url(./img/cielo-azzurro-con-nuvole-bianche_55883-8492.avif);
+  background-size: contain;
+}
+
+.create{
+  position: absolute;
+  top: 14em;
+  left: 27em;
+  z-index: 3;
+  background-color: white;
+  box-shadow: -1px -1px 12px;
+  padding: 1em;
+  border-radius: 10px;
+}
+
+.create input{
+  margin: 2em;
+}
+
+.create button{
+  margin: 1em;
+}
+
 /*main favoriti*/
+
+.favoriteCard{
+  margin: 2em;
+  box-shadow: 1px 0px 8px;
+  background-color: #f3f3f3;
+}
 
 /*footer*/
 
