@@ -63,19 +63,26 @@ const MainPrenotazioni = () => {
       ) : (
         <div className='d-inline-flex'>
           {data.map(item => (
-            <div key={item.id} className="favoriteCard">
-              <h3>{item.titolo}</h3>
-              <img src={item.image} alt="immagine copertina" />
+            <div key={item.id} className = "cardPrenotazioni">
+                        <h3>{item.titolo}</h3>
+                            
+                        <div className='p-2'>
+                            <img src={item.image} alt="immagine copertina" className='imgCopertina' />
+                        </div>                            
+                            
+                        <p>{item.stato}</p>
 
-              <div className='d-inline-flex'> 
-                <p>{item.stato}</p>
-                <p>{item.regione}</p>
-                <p>{item.provincia}</p>
-                <p>{item.citta}</p>
-              </div>
-              
-              <p>{item.descrizione}</p>
-              <p>Price: {item.prezzo}</p>
+                        <div className = 'd-flex'>
+                            <p>{item.check_in}</p>
+                            <p>{item.check_out}</p>                      
+                        </div>
+
+                        <div className = 'd-flex'>
+                            <p>{item.adulti}</p>
+                            <p>{item.bambini}</p>                           
+                        </div>
+
+                        <p>Price: {item.prezzo}</p>
               
               <button 
                 className='btn btn-danger' 

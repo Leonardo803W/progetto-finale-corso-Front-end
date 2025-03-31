@@ -10,8 +10,8 @@ const SchermataPrenotazioni = () => {
                 <GlobalNavbar/>
             </header>
 
-            <main>
-                <h2>
+            <main className = 'imgCopertinaPrenotazioni'>
+                <h2 className = 'titlePrimary'>
                     Le mie prenotazioni
                 </h2>
 

@@ -10,8 +10,8 @@ const SchermataFavoriti = () => {
                 <GlobalNavbar/>
             </header>
 
-            <main>
-                <h2>
+            <main className = 'imgCopertinaFavoriti'>
+                <h2 className = 'titlePrimary'>
                     I miei preferiti
                 </h2>
 

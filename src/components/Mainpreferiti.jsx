@@ -63,22 +63,26 @@ const Mainpreferiti = () => {
                 <p>No favorites found.</p>
             ) : (
                 data.map(item => (
-                    <div key={item.id} className = "favoriteCard">
+                    <div key={item.id} className = "cardPreferiti">
                         <h3>{item.titolo}</h3>
-
-                        <img src = {item.image} alt = "immagine copertina" />
-
-
-
-                        <div className = ' d-inline-flex'> 
+                            
+                            <div className='p-2'>
+                                <img src={item.image} alt="immagine copertina" className='imgCopertina' />
+                            </div>                            
+                                
                             <p>{item.stato}</p>
-                            <p>{item.regione}</p>
-                            <p>{item.provincia}</p>
-                            <p>{item.citta}</p>
-                        </div>
-                        
-                        <p>{item.descrizione}</p>
-                        <p>Price: {item.prezzo}</p>
+    
+                            <div className = 'd-flex'>
+                                <p>{item.check_in}</p>
+                                <p>{item.check_out}</p>                      
+                            </div>
+    
+                            <div className = 'd-flex'>
+                                <p>{item.adulti}</p>
+                                <p>{item.bambini}</p>                           
+                            </div>
+    
+                            <p>Price: {item.prezzo}</p>
                         
                         <div className = 'd-inline-flex align-items-center justify-content-around'>
                             <Link to={`/Dettaglio/${item.id}`}>

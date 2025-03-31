@@ -50,15 +50,6 @@ class ListNavbar extends Component {
     }));
   };
 
-  //funzione per aprire la tenda per selezionare la quantita degli ospitit
-
-  toggleGuestPicker = () => {
-
-    this.setState((prevState) => ({
-      isGuestPickerOpen: !prevState.isGuestPickerOpen
-    }));
-  };
-
   //funzione per aprire la tenda del profilo
 
   toggleProfileDropdown = () => {
@@ -144,7 +135,7 @@ class ListNavbar extends Component {
     return (
       <section className="listNavbar">
         <Link to={"/"}>
-          <div className="brand">Viaggi Passione</div>
+          <div className="brand">Viaggi di Passione</div>
         </Link>
 
         <div className="settings">
@@ -227,15 +218,16 @@ class ListNavbar extends Component {
                       <>
                         {isUserLoggedIn ? (
                           <>
-                            <li><Link to="/prenotazioni">prenotazioni</Link></li>
-                            <li><Link to="/preferiti">Preferiti</Link></li>
+                            <li><Link to="/create">Creazione</Link></li>
                             <li onClick={this.handleLogout}>Logout</li>
                           </>
                         ) : (
                           <>
-                            <li><Link to="/create">Creazione</Link></li>
+                            <li><Link to="/prenotazioni">prenotazioni</Link></li>
+                            <li><Link to="/preferiti">Preferiti</Link></li>
                             <li onClick={this.handleLogout}>Logout</li>
                           </>
+
                         )}
                       </>
                     )

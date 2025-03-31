@@ -1,5 +1,26 @@
 /*con header, main e footer globale intendo tutte quelle caratteristiche che dovranno avere indipendemente in quale pagina si trovano*/
 
+/*globale*/
+
+.linkScorrere{
+  color: black;
+  text-decoration: none;
+  background-color: white;
+  padding: 0.5em;
+  margin: 1em;
+  border-radius: 10px;
+}
+
+.button1{
+  background-color: greenyellow;
+  border-color: greenyellow;
+}
+
+.button2{
+  background-color: red;
+  border-color: red;
+}
+
 /*header globale*/
 
 header a{
@@ -37,9 +58,10 @@ header{
     box-shadow: 1px 1px 12px;
     padding: 1em;
     background: white;
-    left: 30em;
+    left: 20em;
     top: 10em;
     z-index: 3;
+    padding: 2em;
 }
 
 .profileDropdown {
@@ -73,6 +95,26 @@ header{
   border-radius: 15px;
 }
 
+.globalNavbarHeader {
+  display: inline-grid; 
+  justify-content: space-between;
+  width: 100%;
+  padding-left: 2em;
+  padding-right: 2em;
+
+}
+
+@media (min-width: 767px) {
+  .globalNavbarHeader {
+    display: inline-flex;
+    justify-content: space-between;
+    width: 100%;
+    padding-left: 2em;
+    padding-right: 2em;
+    align-items: center;
+  }
+}
+
 /*loading globale*/
 
 .caricamentoSchermata{
@@ -83,6 +125,30 @@ header{
 }
 
 /*error globale*/
+
+/*main globale*/
+
+main {
+  flex: 1;
+}
+
+.buttonGroup{
+  background: #29ff6382;
+  padding-bottom: 1em;
+  padding-top: 1em;
+}
+
+.card button{
+  border-radius: 10px;
+  background-color: #F44336;
+  color: white;
+  border-color: #E91E63;
+}
+
+.card:hover {
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.3); /* Optional: a different shadow on hover */
+}
+
 
 /*header List*/
 
@@ -178,11 +244,12 @@ header{
 main{
   margin: 0;
   text-align: center;
+  min-height: 43.9em;
 }
 
 /*main Home*/
 
-.imgCopertina{
+.imgCopertinahome{
   background-image: url(./img/backgourn\ titolo.jpg);
 }
 
@@ -190,7 +257,7 @@ main{
   background-color: white;
   margin-left: 2em;
   margin-right: 2em;
-  padding: 1em;
+  padding: 0.5em;
   border-radius: 10px;
 }
 
@@ -203,18 +270,6 @@ main{
 
 .selection{
   position: relative;
-}
-
-/* questa classe serve per assicurare che tutto cio al disotto del form si oscuri
-e con l'indez 1 per non contrastare il form, se fosse superiore a questul'timo non ci sarebbe l'oscuramento */
-.overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5); /*per oscurare lo sfondo*/
-  z-index: 1; 
 }
 
 .form{
@@ -288,6 +343,8 @@ e con l'indez 1 per non contrastare il form, se fosse superiore a questul'timo n
   margin-right: 3em;
   background-color: white;
   border-radius: 10px;
+  padding-bottom: 2em;
+  margin-bottom: 1em;
 }
 
 .article{
@@ -316,10 +373,6 @@ e con l'indez 1 per non contrastare il form, se fosse superiore a questul'timo n
 
 .article button{
   margin-bottom: 2em;
-}
-
-.bigSection {
-  padding: 20px;
 }
 
 .card-container {
@@ -351,27 +404,51 @@ e con l'indez 1 per non contrastare il form, se fosse superiore a questul'timo n
   }
 }
 
+@keyframes slideIn {
+  0% {
+      transform: translateY(80px);
+      opacity: 0.8; /* Leggermente sfocato */
+  }
+  100% {
+      transform: translateY(0);
+      opacity: 1; /* A fuoco */
+  }
+}
+
+.card-wrapper {
+  animation: slideIn 6s forwards; /* Durata di 3 secondi */
+}
+
+.mainHome{
+  display: inline-grid;
+  justify-content: space-around;
+  align-items: center;
+}
+
+@media (min-width: 767px) {
+  .mainHome {
+    display: inline-flex;
+    justify-content: space-around;
+    align-items: center;
+  }
+}
+
 /*main List*/
 
-.aggiornaCard{
-  position: fixed;
-  padding: 2em;
-  background: white;
-  z-index: 3;
-  box-shadow: 1px 1px 15px;
-  left: 38em;
-  top: 20em;
+.imgCopertinaList{
+  background-image: url("https://content.skyscnr.com/m/280b941c14ffb962/original/GettyImages-491767692.jpg?resize=1224%3Aauto");
+  background-size: contain;
 }
 
-.eliminaCard{
-  position: fixed;
-  padding: 2em;
-  background: white;
-  z-index: 3;
-  box-shadow: 1px 1px 15px;
-  left: 46em;
-  top: 20em;
+.cardList{
+  margin: 1em;
+  background-color: white;
+  padding: 1em;
+  border-radius: 10px;
 }
+
+.cardList:hover{
+  box-shadow: -3px 2px 9px;}
 
 .cardCarosuel{
   cursor: pointer;
@@ -395,33 +472,25 @@ e con l'indez 1 per non contrastare il form, se fosse superiore a questul'timo n
   z-index: 2;
 }
 
-.card{
-  margin-top: 2em;
-  margin-bottom: 2em;
-}
-
-.card p{
-  margin: 0;
-  padding: 0.5em;
-}
-
-.card h3{
-  margin: 0;
-  padding: 0.5em;
-}
-
-.card button{
+#buttonList{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1em;
   border-radius: 10px;
-  background-color: #63e3fd;
-  color: white;
-  border-color: #36ff93;
-}
-
-.card:hover {
-  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.3); /* Optional: a different shadow on hover */
+  background-color: #89cff5;
+  border: none;
+  margin-top: 1em;
+  width: 100%;
 }
 
 /*main Dettaglio*/
+
+#imgCopertinaDettaglio{
+  background-image: url("https://boscolo-viaggi-res.cloudinary.com/images/w_2560,h_1709/f_auto,q_auto/v1697632955/Blog/volo_aereo_s9e6go/volo_aereo_s9e6go.jpg?_i=AA");
+  background-size: cover;
+  background-repeat: repeat-y;
+}
 
 .imageProduct{
   margin: 2em;
@@ -433,20 +502,83 @@ e con l'indez 1 per non contrastare il form, se fosse superiore a questul'timo n
 
 /*main Create*/
 
+.aggiornaCard{
+  position: fixed;
+  padding: 2em;
+  background: white;
+  z-index: 3;
+  box-shadow: 1px 1px 15px;
+  left: 38em;
+  top: 20em;
+}
+
+.eliminaCard{
+  position: fixed;
+  padding: 2em;
+  background: white;
+  z-index: 3;
+  box-shadow: 1px 1px 15px;
+  left: 46em;
+  top: 20em;
+}
+
+.cardCreazione{
+  margin: 2em;
+}
+
+.cardCreazione p{
+  margin: 0;
+  padding: 0.5em;
+  margin-bottom: 2em;
+}
+
+.cardCreazione h3{
+  margin: 0;
+  padding: 0.5em;
+}
+
+.cardCreazione div{
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.cardCreazione p{
+  margin: 0;
+  padding: 1em;
+}
+
+.divGroup{
+  border-bottom: solid black 1px;
+}
+
 .backgroundCreate{
   background-image: url(./img/cielo-azzurro-con-nuvole-bianche_55883-8492.avif);
   background-size: contain;
 }
 
+.buttonCreate{
+  width: 30%;
+  padding: 1em;
+  border-radius: 10px;
+  background-color: #89cff5;
+  border: none;
+  margin-top: 1em;
+}
+
 .create{
-  position: absolute;
-  top: 14em;
-  left: 27em;
+  position: fixed;
+  top: 7em;
+  left: 10em;
   z-index: 3;
   background-color: white;
   box-shadow: -1px -1px 12px;
   padding: 1em;
   border-radius: 10px;
+  width: 80%;
+  margin: 1em;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .create input{
@@ -459,10 +591,71 @@ e con l'indez 1 per non contrastare il form, se fosse superiore a questul'timo n
 
 /*main favoriti*/
 
-.favoriteCard{
+.imgCopertinaFavoriti{
+  background-image: url("https://heymondo.it/blog/wp-content/uploads/2023/07/Maldive-2.jpg.webp");
+  background-size: cover;
+  background-repeat: repeat-y;
+}
+
+.cardPreferiti{
   margin: 2em;
-  box-shadow: 1px 0px 8px;
-  background-color: #f3f3f3;
+  background-color: white;
+  border-radius: 10px;
+}
+
+.cardPreferiti p{
+  margin: 0;
+  padding: 0.5em;
+  margin-bottom: 2em;
+}
+
+.cardPreferiti h3{
+  margin: 0;
+  padding: 0.5em;
+}
+
+.cardPreferiti button{
+  border-radius: 10px;
+  background-color: #F44336;
+  color: white;
+  border-color: #E91E63;
+}
+
+.cardPreferiti:hover {
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.3); /* Optional: a different shadow on hover */
+}
+
+.imgCopertinaPrenotazioni{
+  background-image: url("https://cdn.studenti.stbm.it/images/2017/01/17/borse-da-viaggio-orig.jpeg");
+  background-size: cover;
+  background-repeat: repeat-y;
+}
+
+/*main prenotazioni*/
+
+.cardPrenotazioni{
+  margin: 2em;
+  padding: 2em;
+  background-color: white;
+  border-radius: 10px;
+}
+
+.cardPrenotazioni p{
+  margin: 0;
+  padding: 0.5em;
+  margin-bottom: 2em;
+}
+
+.cardPrenotazioni h3{
+  margin: 0;
+  padding: 0.5em;
+}
+
+.cardPrenotazioni button{
+  border-radius: 10px;
+  background-color: #F44336;
+  color: white;
+  border-color: #E91E63;
 }
 
 /*footer*/

@@ -61,7 +61,7 @@ const HomeContinents = () => {
                     {arrayCont.map((country, index) => (
                         <div className='card-wrapper' key={index}>
                             <Card className = 'w-100 h-100'>
-                                <Card.Img variant="top" src = {country.image} alt = 'immagine copertina' className = 'w-100'/>
+                                <Card.Img variant="top" src = {country.image} alt = 'immagine copertina' className = 'w-100 h-50'/>
                                 <Card.Body>
                                     <h4>{country.title}</h4>
                                     <p>

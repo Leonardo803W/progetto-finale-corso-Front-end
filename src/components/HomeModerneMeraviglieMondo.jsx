@@ -61,7 +61,7 @@ const HomeModerneMeraviglieMondo = () => {
                     {arrayModern.map((modernWonder, index) => (
                         <div className='card-wrapper' key={index}>
                             <Card className='w-100 h-100'>
-                                <Card.Img variant="top" src={modernWonder.image} alt='immagine copertina' className='w-100'/>
+                                <Card.Img variant="top" src={modernWonder.image} alt='immagine copertina' className='w-100 h-50'/>
                                 <Card.Body>
                                     <h4>{modernWonder.title}</h4>
                                     <p>{modernWonder.description}</p>

@@ -90,7 +90,6 @@ class GlobalNavbar extends Component {
 
     this.setState({ isAlertOpenBye: true });
 
-      // Chiudi l'alert dopo 3 secondi
       setTimeout(() => {
           this.setState({ isAlertOpenBye: false });
       }, 3000);
@@ -123,7 +122,11 @@ class GlobalNavbar extends Component {
         .then(response => {
 
           localStorage.setItem("token", response.data.token); // Store token
-          localStorage.setItem("isAdmin", isAdmin); // Save admin status
+          localStorage.setItem("isAdmin", isAdmin); // Save admin status 
+
+          console.log(response.data.token)
+          console.log(isAdmin)
+
           this.setState({ isAuthenticated: true, isAdmin: isAdmin, isAlertOpen: true }); // Set admin state and alert
           this.closeModal();
           this.setState({ isAlertOpen: true });
@@ -144,7 +147,7 @@ class GlobalNavbar extends Component {
     return (
       <>
         {/* Logo Icon */}
-        <section className="d-inline-flex justify-content-between w-100 pe-4 ps-4 align-items-center">
+        <section className = "globalNavbarHeader">
           <Link to={"/"}>
             <div className="brand">Viaggi di Passione</div>
           </Link>
@@ -161,9 +164,12 @@ class GlobalNavbar extends Component {
 
           <button className="profile" onClick={this.toggleProfileDropdown} ref={this.profileDropdownRef}>
             {/* Profile Icon */}
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-list me-2" viewBox="0 0 16 16">
+              <path fillRule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5"/>
+            </svg>
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-person-circle" viewBox="0 0 16 16">
-              <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0" />
-              <path fillRule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1" />
+              <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
+              <path fillRule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"/>
             </svg>
 
             {/* Profile info */}
@@ -184,7 +190,6 @@ class GlobalNavbar extends Component {
                         </>
                       ) : (
                         <>
-                          <li>Il mio profilo</li>
                           <li><Link to="/preferiti">Preferiti</Link></li>
                           <li><Link to="/prenotazioni">prenotazioni</Link></li>
                           <li onClick={this.handleLogout}>Logout</li>
@@ -220,9 +225,9 @@ class GlobalNavbar extends Component {
         {isModalOpen && (
           <div className="modal-overlay">
             <div className="modal-content">
-              <h2>{isRegisterMode ? "Registrati" : "Accedi" }</h2>
+              <h2 className = "mb-4">{isRegisterMode ? "Registrati" : "Accedi" }</h2>
 
-              <form onSubmit={this.handleAuthSubmit}>
+              <form onSubmit={this.handleAuthSubmit} className = "mb-4">
                 <input
                   type="text"
                   name="username"
@@ -259,8 +264,8 @@ class GlobalNavbar extends Component {
                     required
                   />
                 )}
-                <button type="submit">{isRegisterMode ? "Registrati" : "Accedi"}</button>
-                <button type="button" onClick={this.closeModal}>Chiudi</button>
+                <button className = "button1" type="submit">{isRegisterMode ? "Registrati" : "Accedi"}</button>
+                <button className = "button2" type="button" onClick={this.closeModal}>Chiudi</button>
               </form>
 
               <button onClick={() => this.openModal(!isRegisterMode)}>

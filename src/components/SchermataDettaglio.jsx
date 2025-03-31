@@ -10,7 +10,7 @@ const SchermataDettaglio = () => {
             <GlobalNavbar/>
         </header>
 
-        <main>
+        <main id = 'imgCopertinaDettaglio'>
           <MainDettaglio/>
         </main>
 

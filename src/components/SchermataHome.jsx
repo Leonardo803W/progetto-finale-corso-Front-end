@@ -10,30 +10,36 @@ const SchermataHome = () =>{
 
     return (
         <>
-            <header>
+            <header id = 'header'>
                 <GlobalNavbar />
             </header>
 
-            <main className = 'imgCopertina'>
-                <h3 className = 'titlePrimary'>
-                    In quale continente ti piacerebbe andare?
-                </h3>
+            <main className = 'imgCopertinahome'>
+                <div className = 'mainHome'>
+                    <h3 className = 'titlePrimary w-75'>
+                        In quale continente ti piacerebbe andare?
+                    </h3>
+
+                    <a className = 'linkScorrere' href="#footer">Clicca per vedere gli ultimi elementi.</a>            
+                </div>
                 <Continents />
                 <hr />
 
                 <h3 className = 'titlePrimary'>
-                Quale meraviglia del mondo antico ti piacerebbe visitare?
+                    Quale meraviglia del mondo antico ti piacerebbe visitare?
                 </h3>
                 <AnticheMeraviglieMondo />
                 <hr />
 
                 <h3 className = 'titlePrimary'>
-                Quale meraviglia del mondo moderno ti piacerebbe visitare?
+                    Quale meraviglia del mondo moderno ti piacerebbe visitare?
                 </h3>
                 <ModerneMeraviglieMondo />
+
+                <a className = 'linkScorrere' href="#header">Clicca per vedere i primi elementi.</a>
             </main>
 
-            <footer>
+            <footer id = 'footer'>
                 <MyFooter/>
             </footer>
         </>

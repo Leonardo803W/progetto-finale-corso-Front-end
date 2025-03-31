@@ -37,7 +37,7 @@ const HomeAnticheMeraviglieMondo = () => {
                     {arrayOld.map((oldWonder, index) => (
                         <div className='card-wrapper' key={index}>
                             <Card className='w-100 h-100'>
-                                <Card.Img variant="top" src={oldWonder.image} alt='immagine copertina' className='w-100'/>
+                                <Card.Img variant="top" src={oldWonder.image} alt='immagine copertina' className='w-100 h-50'/>
                                 <Card.Body>
                                     <h4>{oldWonder.title}</h4>
                                     <p>{oldWonder.description}</p>

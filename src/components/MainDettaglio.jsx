@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom'; 
+import { useParams, useHistory, Link } from 'react-router-dom'; 
 
 import GlobalLoading from './GlobalLoading';
 import GlobalError from './GlobalError';
 
 const MainDettaglio = () => {
-  const { id }  = useParams();
+
+  const { id } = useParams();
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -65,14 +66,18 @@ const MainDettaglio = () => {
     return <GlobalError />; 
   }
 
+  const token = localStorage.getItem('token');
+
   return (
     <>
       <h1>{data.data.titolo}</h1>
-      <div className='imageProduct'>
-        <img src="https://placedog.net/500" alt="" />
-      </div>
+
+      <div className='p-2'>
+          <img src={data.data.image} alt="immagine copertina" className='imgCopertina' />
+      </div>       
 
       <div className='d-inline-flex'>
+        <span>Luogo di destinazione: </span>
         <p>{data.data.stato}</p>
         <p>{data.data.regione}</p>
         <p>{data.data.provincia}</p>
@@ -81,17 +86,38 @@ const MainDettaglio = () => {
       
       <section className='d-flex'>
         <div className='w-50 p-2'>
-          <p>{data.data.descrizione}</p>
+
+          <div className = 'd-flex'>
+            <p>Stanze per adulti: {data.data.adulti}</p>
+            <p>Stanze per i bambini: {data.data.bambini}</p>
+          </div>
+
+          <p>Descrizione: {data.data.descrizione}</p>
         </div>
 
         <aside className='m-2 me-auto ms-auto'>
+
+          <div className = 'd-flex'>
+            <p>Data di check-In: {data.data.checkIn}</p>
+            <p>Data di check-Out: {data.data.checkOut}</p>                      
+          </div>
+
           <p>Price: ${data.data.prezzo}</p>
-          <button 
-            className='btn btn-danger' // Bootstrap class for styling a red button
-            onClick={handlePrenota}
-          >
-            Prenota
-          </button>
+
+          {token ? (
+            <button 
+              className = 'btn btn-danger' 
+              onClick={handlePrenota}
+            >
+              Prenota
+            </button>
+          ) : (
+            <Link to = "/">
+              <button className = 'btn btn-primary' >
+                Registrati per prenotare
+              </button>
+            </Link>
+          )}
         </aside>
       </section>
     </>

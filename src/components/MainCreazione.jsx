@@ -3,12 +3,13 @@ import GlobalLoading from './GlobalLoading'; // Importa il tuo componente di car
 import GlobalError from './GlobalError'; // Importa il tuo componente di errore
 
 const MainCreazione = () => {
+
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);
     const [windowOpen, setWindowOpen] = useState(false);
     const [windowOpenModify, setWindowOpenModify] = useState(false);
-    const [currentId, setCurrentId] = useState(null); // Stato per tenere traccia dell'ID dell'elemento da modificare
+    const [currentId, setCurrentId] = useState(null);
 
     // Stato per i campi di input
     const [newTitle, setNewTitle] = useState('');
@@ -18,6 +19,10 @@ const MainCreazione = () => {
     const [newProvincia, setNewProvincia] = useState('');
     const [newDescription, setNewDescription] = useState('');
     const [newPrice, setNewPrice] = useState('');
+    const [newAdult, setNewAdult] = useState('');
+    const [newChild, setNewChild] = useState('');
+    const [newStartDate, setNewStartDate] = useState('');
+    const [newEndDate, setNewEndDate] = useState('');
 
     useEffect(() => {
         const fetchData = async () => {
@@ -37,6 +42,7 @@ const MainCreazione = () => {
                 }
 
                 const result = await response.json();
+                console.log(result)
                 setData(result.data);
             } catch (error) {
                 setError(error);
@@ -59,8 +65,12 @@ const MainCreazione = () => {
         setNewProvincia(item.provincia);
         setNewDescription(item.descrizione);
         setNewPrice(item.prezzo);
-        setCurrentId(item.id); // Imposta l'ID dell'elemento da modificare
-        setWindowOpenModify(true); // Apri la finestra di modifica
+        setNewAdult(item.adulti);
+        setNewChild(item.bambini);
+        setNewStartDate(item.checkIn);
+        setNewEndDate(item.checkOut);
+        setCurrentId(item.id);
+        setWindowOpenModify(true);
     };
 
     const handleModify = async () => {
@@ -72,14 +82,18 @@ const MainCreazione = () => {
                         'Authorization': 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJsZW9uIiwicm9sZXMiOlsiUk9MRV9VU0VSIl0sImlhdCI6MTc0MzA4MDIwNywiZXhwIjoxNzQzOTQ0MjA3fQ.qNzRg0SS0wRcjLW1RdmYAyB1ZHpUur8JYCRZsjiZpzY',
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({ 
-                        titolo: newTitle, 
-                        image: newImageUrl,
-                        stato: newState, 
-                        provincia: newProvincia, 
-                        citta: newCity, 
-                        descrizione: newDescription,
-                        prezzo: newPrice, 
+                    body: JSON.stringify({
+                            titolo: newTitle,
+                            image: newImageUrl,
+                            stato: newState,
+                            provincia: newProvincia,
+                            citta: newCity,
+                            descrizione: newDescription,
+                            prezzo: newPrice,
+                            adulti: newAdult,
+                            bambini: newChild,
+                            checkIn: newStartDate,
+                            checkOut: newEndDate,
                     }),
                 });
 
@@ -137,7 +151,11 @@ const MainCreazione = () => {
                         provincia: newProvincia, 
                         citta: newCity, 
                         descrizione: newDescription,
-                        prezzo: newPrice, 
+                        prezzo: newPrice, // Assicurati che sia un numero
+                        adulti: newAdult, // Assicurati che sia un numero
+                        bambini: newChild, // Assicurati che sia un numero
+                        checkIn: newStartDate, 
+                        checkOut: newEndDate, 
                     }),
                 });
 
@@ -168,6 +186,10 @@ const MainCreazione = () => {
         setNewProvincia('');
         setNewDescription('');
         setNewPrice('');
+        setNewAdult('');
+        setNewChild('');
+        setNewStartDate('');
+        setNewEndDate('');
         setCurrentId(null); // Resetta l'ID corrente
     };
 
@@ -179,22 +201,22 @@ const MainCreazione = () => {
 
     return (
         <>
-            <section className='backgroundCreate'>
-                <h3>
-                    Benvenuto nella pagina della creazione Admin!
-                </h3>
+            <section>
 
-                <button onClick={handleCreateOpen}>Crea</button>
+                <button className = 'buttonCreate' onClick={handleCreateOpen}> <span>Vuoi creare un nuovo viaggio? </span>Crea</button>
 
                 {windowOpen && (
                     <section className='create'>
                         <div>
+                            <label>Titolo: </label>
                             <input 
                                 type="text" 
-                                placeholder="Titolo" 
+                                placeholder="Bar disco...." 
                                 value={newTitle} 
                                 onChange={(e) => setNewTitle(e.target.value)} 
                             />
+
+                            <label>Immagine: </label>
                             <input 
                                 type="text" 
                                 placeholder="URL Immagine" 
@@ -203,55 +225,104 @@ const MainCreazione = () => {
                             />
                         </div>
                         <div>
+                            <label>Stato: </label>
                             <input 
                                 type="text" 
-                                placeholder="Stato" 
+                                placeholder="Canada" 
                                 value={newState} 
                                 onChange={(e) => setNewState(e.target.value)} 
                             />
+
+                            <label>Citta: </label>
                             <input 
                                 type="text" 
-                                placeholder="Città" 
+                                placeholder="Parigi" 
                                 value={newCity} 
                                 onChange={(e) => setNewCity(e.target.value)} 
                             />
                         </div>
                         <div>
+                            <label>Provincia: </label>
                             <input 
                                 type="text" 
-                                placeholder="Provincia" 
+                                placeholder="Sondrio" 
                                 value={newProvincia} 
                                 onChange={(e) => setNewProvincia(e.target.value)} 
                             />
+
+                            <label>Descrizione: </label>
                             <input 
                                 type="text" 
-                                placeholder="Descrizione" 
+                                placeholder="Ostello accogliente e servizi ottimi...." 
                                 value={newDescription} 
                                 onChange={(e) => setNewDescription(e.target.value)} 
                             />
                         </div>
+
                         <div>
+                            <label>Quanti adulti?: </label>
                             <input 
                                 type="number" 
-                                placeholder="Prezzo" 
+                                placeholder="1" 
+                                value={newAdult} 
+                                onChange={(e) => setNewAdult(e.target.value)}
+                            />
+
+                            <label>Quanti bambini?: </label>
+                            <input 
+                                type="number" 
+                                placeholder="1" 
+                                value={newChild} 
+                                onChange={(e) => setNewChild(e.target.value)}
+                            />
+                        </div>
+
+                        <div>
+                            <label>Data di check-In: </label>
+                            <input 
+                                type="date" 
+                                placeholder="Data Inizio" 
+                                value={newStartDate} 
+                                onChange={(e) => setNewStartDate(e.target.value)} 
+                            />
+
+                            <label>Data d check-Out: </label>
+                            <input 
+                                type="date" 
+                                placeholder="Data Fine" 
+                                value={newEndDate} 
+                                onChange={(e) => setNewEndDate(e.target.value)} 
+                            />
+                        </div>
+
+                        <div>
+                            <label>Prezzo: </label>
+                            <input 
+                                type="number" 
+                                placeholder="500" 
                                 value={newPrice} 
                                 onChange={(e) => setNewPrice(e.target.value)} 
                             />
                         </div>
-                        <button onClick={handleCreate}>Salva</button>
-                        <button onClick={handleCancel}>Annulla</button>
+
+                        <button className = "button1" onClick={handleCreate}>Salva</button>
+                        <button className = "button2"  onClick={handleCancel}>Annulla</button>
+
                     </section>
                 )}
 
                 {windowOpenModify && (
                     <section className='create'>
                         <div>
+                            <label>Titolo: </label>
                             <input 
                                 type="text" 
-                                placeholder="Titolo" 
+                                placeholder="Bar disco...." 
                                 value={newTitle} 
                                 onChange={(e) => setNewTitle(e.target.value)} 
                             />
+
+                            <label>Immagine: </label>
                             <input 
                                 type="text" 
                                 placeholder="URL Immagine" 
@@ -260,41 +331,85 @@ const MainCreazione = () => {
                             />
                         </div>
                         <div>
+                            <label>Stato: </label>
                             <input 
                                 type="text" 
-                                placeholder="Stato" 
+                                placeholder="Canada" 
                                 value={newState} 
                                 onChange={(e) => setNewState(e.target.value)} 
                             />
+
+                            <label>Citta: </label>
                             <input 
                                 type="text" 
-                                placeholder="Città" 
+                                placeholder="Parigi" 
                                 value={newCity} 
                                 onChange={(e) => setNewCity(e.target.value)} 
                             />
                         </div>
                         <div>
+                            <label>Provincia: </label>
                             <input 
                                 type="text" 
-                                placeholder="Provincia" 
+                                placeholder="Sondrio" 
                                 value={newProvincia} 
                                 onChange={(e) => setNewProvincia(e.target.value)} 
                             />
+
+                            <label>Descrizione: </label>
                             <input 
                                 type="text" 
-                                placeholder="Descrizione" 
+                                placeholder="Ostello accogliente e servizi ottimi...." 
                                 value={newDescription} 
                                 onChange={(e) => setNewDescription(e.target.value)} 
                             />
                         </div>
                         <div>
+                            <label>Quanti adulti?: </label>
                             <input 
                                 type="number" 
-                                placeholder="Prezzo" 
+                                placeholder="1" 
+                                value={newAdult} 
+                                onChange={(e) => setNewAdult(e.target.value)}
+                            />
+
+                            <label>Quanti bambini?: </label>
+                            <input 
+                                type="number" 
+                                placeholder="1" 
+                                value={newChild} 
+                                onChange={(e) => setNewChild(e.target.value)}
+                            />
+                        </div>
+
+                        <div>
+                            <label>Data di check-In: </label>
+                            <input 
+                                type="date" 
+                                placeholder="Data Inizio" 
+                                value={newStartDate} 
+                                onChange={(e) => setNewStartDate(e.target.value)} 
+                            />
+
+                            <label>Data d check-Out: </label>
+                            <input 
+                                type="date" 
+                                placeholder="Data Fine" 
+                                value={newEndDate} 
+                                onChange={(e) => setNewEndDate(e.target.value)} 
+                            />
+                        </div>
+
+                        <div>
+                            <label>Prezzo: </label>
+                            <input 
+                                type="number" 
+                                placeholder="500" 
                                 value={newPrice} 
                                 onChange={(e) => setNewPrice(e.target.value)} 
                             />
                         </div>
+
                         <button onClick={handleModify}>Salva Modifiche</button>
                         <button onClick={handleCancel}>Annulla</button>
                     </section>
@@ -302,18 +417,27 @@ const MainCreazione = () => {
 
                 <div className="card-container">
                     {data.map((item) => (
-                        <div key={item.id} className="card">
+                        <div key={item.id} className = "cardCreazione">
                             <h3>{item.titolo}</h3>
                             <img src={item.image} alt="immagine copertina" />
-                            <p>{item.stato}</p>
-                            <p>{item.regione}</p>
-                            <p>{item.provincia}</p>
-                            <p>{item.citta}</p>
-                            <p>{item.descrizione}</p>
-                            <p>{item.prezzo}</p>
-                            <div className="button-group"> 
-                                <button onClick={() => handleModifyOpen(item)}>Modifica</button>
-                                <button onClick={() => handleDelete(item.id)}>Elimina</button>
+
+                            <p>Luogo della struttura: {item.stato}</p>
+
+                            <div className = 'divGroup'>
+                                <p>Check In: {item.checkIn}</p>
+                                <p>Check Out: {item.checkOut}</p>               
+                            </div>
+
+                            <div className = 'divGroup'>
+                                <p>camere per adulti: {item.adulti}</p>
+                                <p>camere per bambini: {item.bambini}</p>                           
+                            </div>
+
+                            <p>Prezzo della prenotazioen: {item.prezzo}</p>
+
+                            <div className="buttonGroup"> 
+                                <button className = "button1" onClick={() => handleModifyOpen(item)}>Modifica</button>
+                                <button className = "button2" onClick={() => handleDelete(item.id)}>Elimina</button>
                             </div>
                         </div>
                     ))}

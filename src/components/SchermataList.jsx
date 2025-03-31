@@ -34,7 +34,7 @@ const SchermataList = () => {
 
   return (
       <>
-          <header>
+          <header id = 'header'>
               <ListNavbar 
                   title={title} 
                   dove={dove} 
@@ -52,17 +52,22 @@ const SchermataList = () => {
               />
           </header>
             
-          <main>
-        <MainList 
-          dove={dove}
-          chekIn={chekIn}
-          chekOut={chekOut}
-          adulti={adulti}
-          bambini={bambini}
-        />
-      </main>
+            <main className = 'imgCopertinaList'>
 
-            <footer>
+                <a className = 'linkScorrere' href="#footer">Clicca per vedere gli ultimi elementi.</a>            
+
+                <MainList 
+                dove={dove}
+                chekIn={chekIn}
+                chekOut={chekOut}
+                adulti={adulti}
+                bambini={bambini}
+                />
+
+                <a className = 'linkScorrere' href="#header">Clicca per vedere i primi elementi.</a>
+            </main>
+
+            <footer id = 'footer'>
                 <MyFooter />
             </footer>
         </>
