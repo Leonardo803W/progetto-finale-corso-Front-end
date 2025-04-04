@@ -11,57 +11,28 @@
   border-radius: 10px;
 }
 
-.button1{
-  background-color: greenyellow;
-  border-color: greenyellow;
-}
-
-.button2{
-  background-color: red;
-  border-color: red;
+.linkScorrere:hover{
+ color: rgb(46, 179, 231);
 }
 
 /*header globale*/
-
-header a{
-  text-decoration: none;
-}
 
 header{
   padding: 1em;
   color: white;
   background-color: #0a0a0a;
   border-bottom: solid 3px rgb(246, 250, 31);
-}
-
-.link{
-  color: black;
+  text-align: center;
 }
 
 .profile{
+  border: none;
+  border-radius: 15px;
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
+  padding-right: 1em;
+  padding-left: 1em;
   margin: 1em;
-}
-
-.data {
-  z-index: 3;
-  position: absolute;
-}
-
-.modal-overlay2{
-  background-color: rgba(0, 0, 0, 0.5);
-
-}
-
-.modal-overlay{
-  position: absolute;
-    color: black;
-    box-shadow: 1px 1px 12px;
-    padding: 1em;
-    background: white;
-    left: 20em;
-    top: 10em;
-    z-index: 3;
-    padding: 2em;
 }
 
 .profileDropdown {
@@ -78,10 +49,6 @@ header{
   margin: 1em;
 }
 
-.search{
-  margin-right: 0.5em;
-}
-
 .alertLoginRegister{
   position: fixed;
   z-index: 3;
@@ -93,6 +60,46 @@ header{
   padding: 1em;
   color: #1f891f;
   border-radius: 15px;
+}
+
+
+header a{
+  text-decoration: none;
+  color: black;
+}
+
+
+.modal-overlay{
+  position: absolute;
+  color: black;
+  box-shadow: 1px 1px 12px;
+  padding: 1em;
+  background: white;
+  left: 20em;
+  top: 10em;
+  z-index: 3;
+  padding: 2em;
+}
+
+.form{
+  padding: 2em;
+  text-align: center;
+  box-shadow: -1px 1px 13px 1px;
+  width: 60%;
+  position: absolute;
+  left: 18em;
+  bottom: 15em;
+  background-color: white;
+  z-index: 2;
+}
+
+.buttonSerach{
+  text-align: center;
+  padding: 1em;
+  background-color: #2196F3;
+  border-color: #2196F3;
+  color: white;
+  border-radius: 10px;
 }
 
 .globalNavbarHeader {
@@ -113,6 +120,47 @@ header{
     padding-right: 2em;
     align-items: center;
   }
+}
+
+.profileDropdown ul {
+  position: absolute;
+  background-color: white;
+  padding: 1em;
+  margin: 0;
+  z-index: 3;
+  box-shadow: 1px 1px 11px;
+  border-radius: 10px;
+  left: -1em;
+  width: 16em;
+}
+
+.profileDropdown li:hover{
+  color: rgb(123, 194, 18);
+}
+
+@media (min-width: 767px) {
+  .profileDropdown ul{
+    position: absolute;
+    background-color: white;
+    padding: 1em;
+    margin: 0;
+    z-index: 3;
+    box-shadow: 1px 1px 11px;
+    border-radius: 10px;
+    left: -5em;
+    width: 12em;
+  }
+}
+
+
+.profileDropdown{
+  position: absolute;
+}
+
+.profileDropdown ul li{
+  list-style: none;
+  padding: 1em;
+  box-shadow: 0px 1px 4px;
 }
 
 /*loading globale*/
@@ -138,108 +186,9 @@ main {
   padding-top: 1em;
 }
 
-.card button{
-  border-radius: 10px;
-  background-color: #F44336;
-  color: white;
-  border-color: #E91E63;
-}
-
 .card:hover {
   box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.3); /* Optional: a different shadow on hover */
 }
-
-
-/*header List*/
-
-.listNavbar{
-  display: inline-grid;
-  justify-content: space-between;
-  width: 100%;
-  align-items: center;
-}
-
-@media (min-width: 768px) {
-  .listNavbar{
-    display: inline-flex;
-    justify-content: space-between;
-    width: 100%;
-    padding-left: 2em;
-    padding-right: 2em;
-    align-items: center;
-  }
-}
-
-.settings{
-  order: 2;
-  display: flex;
-  background-color: white;
-  color: black;
-  align-items: center;
-}
-
-@media (min-width: 768px) {
-  .settings{
-    order: 0;
-    display: flex;
-    background-color: white;
-    color: black;
-    align-items: center;
-  }
-}
-
-
-.settings button{
-  border: none;
-  background-color: white;
-}
-
-.profile{
-  border: none;
-  border-radius: 15px;
-  padding-top: 0.5em;
-  padding-bottom: 0.5em;
-  padding-right: 1em;
-  padding-left: 1em;
-}
-
-.profileDropdown{
-  position: absolute;
-}
-
-.profileDropdown ul{
-  position: absolute;
-  background-color: white;
-  padding: 1em;
-  margin: 0;
-  z-index: 3;
-  box-shadow: 1px 1px 11px;
-  border-radius: 10px;
-  left: -5em;
-}
-
-.profileDropdown ul li{
-  list-style: none;
-  padding: 1em;
-  box-shadow: 0px 1px 4px;
-}
-
-.guestPicker{
-  background-color: white;
-  color: black;
-  position: absolute;
-  z-index: 3;
-  padding: 1em;
-  box-shadow: 1px 1px 6px;
-}
-
-.guestPicker button{
-  background-color: white;
-  margin: 0.5em;
-}
-
-
-/*main globale*/
 
 main{
   margin: 0;
@@ -247,10 +196,42 @@ main{
   min-height: 43.9em;
 }
 
+.buttonD{
+  border-radius: 10px;
+  background-color: #d1645c;
+  color: white;
+  border-color: #E91E63;
+  padding: 0.5em;
+}
+
+.buttonD:hover{
+  background-color: red;
+}
+
+.divGroup{
+  border-bottom: solid #6be0ff 1px;
+  border-top: solid #6be0ff 1px;
+  justify-content: space-around;
+  padding: 1em;
+}
+
+
+#buttonList{
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 1em;
+  border-radius: 10px;
+  background-color: #89cff5;
+  border: none;
+  width: 100%;
+}
+
 /*main Home*/
 
 .imgCopertinahome{
   background-image: url(./img/backgourn\ titolo.jpg);
+  background-size: 50%;
 }
 
 .titlePrimary{
@@ -259,79 +240,6 @@ main{
   margin-right: 2em;
   padding: 0.5em;
   border-radius: 10px;
-}
-
-.data{
-  z-index: 3;
-  position: absolute;
-  background-color: white;
-  box-shadow: 1px 1px 6px;
-}
-
-.selection{
-  position: relative;
-}
-
-.form{
-  padding: 2em;
-  text-align: center;
-  box-shadow: -1px 1px 13px 1px;
-  width: 60%;
-  position: absolute;
-  left: 18em;
-  bottom: 15em;
-  background-color: white;
-  z-index: 2;
-}
-
-.listSuggest{
-  position: absolute;
-  z-index: 1;
-  background-color: white;
-  box-shadow: 1px 1px 8px 1px;
-  flex-direction: column;
-  display: flex;
-  padding-bottom: 1em;
-  padding-right: 1em;
-}
-
-.pointImg{
-  margin-right: 1em;
-    border: 1px solid gray;
-    padding: 1em;
-    height: 50px;
-    width: 50px;
-}
-
-.listElement{
-  list-style: none;
-}
-
-.selection{
-  display: inline-flex;
-  border: 2px solid #c5bcbcb3;
-  margin-top: 1em;
-  justify-content: space-around;
-  width: 90%;
-}
-
-#adults{
-  width: 120px;
-}
-
-#childe{
-  width: 120px;
-}
-
-.buttonSerach{
-  margin-top: 1em;
-  margin-left: 0em;
-  text-align: center;
-  padding: 1em;
-  background-color: red;
-  width: 85%;
-  border: none;
-  color: white;
 }
 
 .bigSection{
@@ -345,34 +253,6 @@ main{
   border-radius: 10px;
   padding-bottom: 2em;
   margin-bottom: 1em;
-}
-
-.article{
-  margin: 1em;
-  width: 20%;
-  box-shadow: 1px 1px 7px;
-  border-radius: 10%;
-}
-
-.article img{
-  border-top-right-radius: 10%;
-  border-top-left-radius: 10%;
-  height: 40%;
-}
-
-.article h4{
-  margin: 0;
-  padding: 0.5em;
-  font-size: larger;
-}
-
-.article p{
-  margin: 0;
-  padding: 1em;
-}
-
-.article button{
-  margin-bottom: 2em;
 }
 
 .card-container {
@@ -437,7 +317,7 @@ main{
 
 .imgCopertinaList{
   background-image: url("https://content.skyscnr.com/m/280b941c14ffb962/original/GettyImages-491767692.jpg?resize=1224%3Aauto");
-  background-size: contain;
+  background-size: 100%;
 }
 
 .cardList{
@@ -464,24 +344,9 @@ main{
 }
 
 .preferitiImg{
-  right: 0em;
-  top: 0em;
   cursor: pointer;
-  color: black;
+  color: #ff4747;
   padding: 1em;
-  z-index: 2;
-}
-
-#buttonList{
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 1em;
-  border-radius: 10px;
-  background-color: #89cff5;
-  border: none;
-  margin-top: 1em;
-  width: 100%;
 }
 
 /*main Dettaglio*/
@@ -492,12 +357,48 @@ main{
   background-repeat: repeat-y;
 }
 
-.imageProduct{
-  margin: 2em;
+.BigSectionDettaglio h3{
+  padding: 0.5em;
+  background-color: white;
+  width: 50%;
+  margin: auto;
+  border-radius: 10px;
 }
 
-.imageProduct img{
-  height: 200px;
+.BigSectionDettaglio img{
+  width: 50%;
+  margin: auto;
+  padding: 1em;
+}
+
+.luogoCasa{
+  display: flex;
+  background-color: white;
+  width: 80%;
+  text-align: center;
+  align-items: center;
+  padding: 0.5em;
+  border-radius: 10px;
+  margin: auto;
+}
+
+.luogoCasa p{
+ margin: 0;
+ padding-left: 1em;
+ padding-right: 1em;
+}
+
+.maindDettaglio{
+  display: flex;
+  justify-content: space-around;
+  padding: 1em;
+  border-bottom: solid 1px #48deff;
+}
+
+#buttonDettaglio{
+  padding: 3em;
+  box-shadow: -2px -1px 16px 0px;
+  border-radius: 10px;
 }
 
 /*main Create*/
@@ -522,35 +423,6 @@ main{
   top: 20em;
 }
 
-.cardCreazione{
-  margin: 2em;
-}
-
-.cardCreazione p{
-  margin: 0;
-  padding: 0.5em;
-  margin-bottom: 2em;
-}
-
-.cardCreazione h3{
-  margin: 0;
-  padding: 0.5em;
-}
-
-.cardCreazione div{
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-}
-
-.cardCreazione p{
-  margin: 0;
-  padding: 1em;
-}
-
-.divGroup{
-  border-bottom: solid black 1px;
-}
 
 .backgroundCreate{
   background-image: url(./img/cielo-azzurro-con-nuvole-bianche_55883-8492.avif);
@@ -589,6 +461,24 @@ main{
   margin: 1em;
 }
 
+
+#buttonDCreate1{
+  border-radius: 10px;
+  color: white;
+  padding: 0.5em;
+  background-color: greenyellow;
+  border-color: greenyellow;
+}
+
+#buttonDCreate2{
+  border-radius: 10px;
+  color: white;
+  padding: 0.5em;
+  background-color: red;
+  border-color: red;
+}
+
+
 /*main favoriti*/
 
 .imgCopertinaFavoriti{
@@ -597,65 +487,12 @@ main{
   background-repeat: repeat-y;
 }
 
-.cardPreferiti{
-  margin: 2em;
-  background-color: white;
-  border-radius: 10px;
-}
-
-.cardPreferiti p{
-  margin: 0;
-  padding: 0.5em;
-  margin-bottom: 2em;
-}
-
-.cardPreferiti h3{
-  margin: 0;
-  padding: 0.5em;
-}
-
-.cardPreferiti button{
-  border-radius: 10px;
-  background-color: #F44336;
-  color: white;
-  border-color: #E91E63;
-}
-
-.cardPreferiti:hover {
-  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.3); /* Optional: a different shadow on hover */
-}
+/*main prenotazioni*/
 
 .imgCopertinaPrenotazioni{
   background-image: url("https://cdn.studenti.stbm.it/images/2017/01/17/borse-da-viaggio-orig.jpeg");
   background-size: cover;
   background-repeat: repeat-y;
-}
-
-/*main prenotazioni*/
-
-.cardPrenotazioni{
-  margin: 2em;
-  padding: 2em;
-  background-color: white;
-  border-radius: 10px;
-}
-
-.cardPrenotazioni p{
-  margin: 0;
-  padding: 0.5em;
-  margin-bottom: 2em;
-}
-
-.cardPrenotazioni h3{
-  margin: 0;
-  padding: 0.5em;
-}
-
-.cardPrenotazioni button{
-  border-radius: 10px;
-  background-color: #F44336;
-  color: white;
-  border-color: #E91E63;
 }
 
 /*footer*/

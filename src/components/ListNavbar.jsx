@@ -138,62 +138,6 @@ class ListNavbar extends Component {
           <div className="brand">Viaggi di Passione</div>
         </Link>
 
-        <div className="settings">
-          <button>
-              <label className='d-block pb-2 pe-2'>dove</label>
-              <input 
-                type="text" 
-                className='p-2 border-0' 
-                placeholder="stato, paese o nazione"
-                value={dove}
-                            onChange={(e) => setDove(e.target.value)} // Update state on input change
-              />
-            </button>
-
-          <div ref={this.startDatePickerRef}>
-            <label className='d-block pb-2 pe-2'>check-in</label>
-            <button onClick={this.toggleStartDatePicker}>
-            {this.state.startDate? this.state.startDate.toLocaleDateString() : 'Seleziona data'}
-            </button>
-            {this.state.isStartDatePickerOpen && (
-              <DatePicker
-                selected={this.state.startDate}
-                onChange={this.handleStartDateChange}
-                minDate={new Date()}
-                inline 
-                
-              />
-            )}
-          </div>
-
-          <div ref={this.endDatePickerRef}>
-            <label className='d-block pb-2 pe-2'>check-out</label>
-            <button onClick={this.toggleEndDatePicker} disabled={!this.state.startDate}>
-            {this.state.endDate ? this.state.endDate.toLocaleDateString() : 'Seleziona data'}
-            </button>
-            {this.state.isEndDatePickerOpen && (
-              <DatePicker
-                selected={this.state.endDate}
-                onChange={this.handleEndDateChange}
-                minDate={this.state.startDate ? new Date(this.state.startDate) : new Date()}
-                inline
-              />
-            )}
-          </div>
-
-          {/* Selettore per Ospiti */}
-          <div>
-            <button onClick={this.decrementAdults}>-</button>
-            <span>{this.props.adulti}</span>
-            <button onClick={this.incrementAdults}>+</button>
-            <button onClick={this.decrementChildren}>-</button>
-            <span>{this.props.bambini}</span>
-            <button onClick={this.incrementChildren}>+</button>
-          </div>
-
-          <button onClick={this.handleSearch}>Cerca</button>
-          <button onClick={this.resetFilters}>Reset</button>
-        </div>
 
         <button className="profile" onClick={this.toggleProfileDropdown} ref={this.profileDropdownRef}>
 

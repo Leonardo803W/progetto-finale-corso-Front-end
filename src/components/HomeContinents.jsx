@@ -71,7 +71,7 @@ const HomeContinents = () => {
                                         pathname: '/list',
                                         state: { title: country.title }
                                     }}>
-                                        <Button variant="primary">Prenota e vola!</Button>
+                                        <button className = 'buttonD'>Prenota e vola!</button>
                                     </Link>
                                 </Card.Body>
                             </Card>

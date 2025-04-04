@@ -42,7 +42,7 @@ const HomeAnticheMeraviglieMondo = () => {
                                     <h4>{oldWonder.title}</h4>
                                     <p>{oldWonder.description}</p>
                                     <Link to="/list">
-                                        <Button variant="primary">Prenota e vola!</Button>
+                                        <button className = 'buttonD'>Prenota e vola!</button>
                                     </Link>
                                 </Card.Body>
                             </Card>

@@ -23,6 +23,8 @@ const MainCreazione = () => {
     const [newChild, setNewChild] = useState('');
     const [newStartDate, setNewStartDate] = useState('');
     const [newEndDate, setNewEndDate] = useState('');
+    const [inputValue, setInputValue] = useState('');
+
 
     useEffect(() => {
         const fetchData = async () => {
@@ -73,43 +75,27 @@ const MainCreazione = () => {
         setWindowOpenModify(true);
     };
 
-    const handleModify = async () => {
-        if (newTitle && newDescription) {
-            try {
-                const response = await fetch(`http://localhost:8080/api/viaggi/modifyById/${currentId}`, {
-                    method: 'PUT',
-                    headers: {
-                        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJsZW9uIiwicm9sZXMiOlsiUk9MRV9VU0VSIl0sImlhdCI6MTc0MzA4MDIwNywiZXhwIjoxNzQzOTQ0MjA3fQ.qNzRg0SS0wRcjLW1RdmYAyB1ZHpUur8JYCRZsjiZpzY',
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                            titolo: newTitle,
-                            image: newImageUrl,
-                            stato: newState,
-                            provincia: newProvincia,
-                            citta: newCity,
-                            descrizione: newDescription,
-                            prezzo: newPrice,
-                            adulti: newAdult,
-                            bambini: newChild,
-                            checkIn: newStartDate,
-                            checkOut: newEndDate,
-                    }),
-                });
-
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-
-                const updatedItem = await response.json(); // Assicurati di ricevere l'oggetto aggiornato
-                setData(prevData => prevData.map(item => item.id === currentId ? updatedItem : item));
-                resetFields();
-                setWindowOpenModify(false); // Chiude la finestra di modifica
-            } catch (error) {
-                console.error('Error during modification:', error);
-            }
+    const handleModify = async (id, data) => {
+        try {
+          const response = await fetch(`http://localhost:8080/api/viaggi/modifyById/${id}`, {
+            method: 'PUT',
+            headers: {
+              'Authorization': 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJsZW9uIiwicm9sZXMiOlsiUk9MRV9VU0VSIl0sImlhdCI6MTc0MzA4MDIwNywiZXhwIjoxNzQzOTQ0MjA3fQ.qNzRg0SS0wRcjLW1RdmYAyB1ZHpUur8JYCRZsjiZpzY',
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+          });
+      
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+      
+          const result = await response.json();
+          console.log('Success:', result);
+        } catch (error) {
+          console.error('Error during modification:', error);
         }
-    };
+      };
 
     const handleDelete = async (id) => {
         const confirmDelete = window.confirm('Sei sicuro di voler eliminare questo elemento?');
@@ -212,7 +198,7 @@ const MainCreazione = () => {
                             <input 
                                 type="text" 
                                 placeholder="Bar disco...." 
-                                value={newTitle} 
+                                value={newTitle || ''} 
                                 onChange={(e) => setNewTitle(e.target.value)} 
                             />
 
@@ -220,7 +206,7 @@ const MainCreazione = () => {
                             <input 
                                 type="text" 
                                 placeholder="URL Immagine" 
-                                value={newImageUrl} 
+                                value={newImageUrl || ''} 
                                 onChange={(e) => setNewImageUrl(e.target.value)} 
                             />
                         </div>
@@ -229,7 +215,7 @@ const MainCreazione = () => {
                             <input 
                                 type="text" 
                                 placeholder="Canada" 
-                                value={newState} 
+                                value={newState || ''} 
                                 onChange={(e) => setNewState(e.target.value)} 
                             />
 
@@ -237,7 +223,7 @@ const MainCreazione = () => {
                             <input 
                                 type="text" 
                                 placeholder="Parigi" 
-                                value={newCity} 
+                                value={newCity || ''} 
                                 onChange={(e) => setNewCity(e.target.value)} 
                             />
                         </div>
@@ -246,7 +232,7 @@ const MainCreazione = () => {
                             <input 
                                 type="text" 
                                 placeholder="Sondrio" 
-                                value={newProvincia} 
+                                value={newProvincia || ''} 
                                 onChange={(e) => setNewProvincia(e.target.value)} 
                             />
 
@@ -254,7 +240,7 @@ const MainCreazione = () => {
                             <input 
                                 type="text" 
                                 placeholder="Ostello accogliente e servizi ottimi...." 
-                                value={newDescription} 
+                                value={newDescription || ''} 
                                 onChange={(e) => setNewDescription(e.target.value)} 
                             />
                         </div>
@@ -264,7 +250,7 @@ const MainCreazione = () => {
                             <input 
                                 type="number" 
                                 placeholder="1" 
-                                value={newAdult} 
+                                value={newAdult || ''} 
                                 onChange={(e) => setNewAdult(e.target.value)}
                             />
 
@@ -272,7 +258,7 @@ const MainCreazione = () => {
                             <input 
                                 type="number" 
                                 placeholder="1" 
-                                value={newChild} 
+                                value={newChild || ''} 
                                 onChange={(e) => setNewChild(e.target.value)}
                             />
                         </div>
@@ -282,7 +268,7 @@ const MainCreazione = () => {
                             <input 
                                 type="date" 
                                 placeholder="Data Inizio" 
-                                value={newStartDate} 
+                                value={newStartDate || ''} 
                                 onChange={(e) => setNewStartDate(e.target.value)} 
                             />
 
@@ -290,7 +276,7 @@ const MainCreazione = () => {
                             <input 
                                 type="date" 
                                 placeholder="Data Fine" 
-                                value={newEndDate} 
+                                value={newEndDate || ''} 
                                 onChange={(e) => setNewEndDate(e.target.value)} 
                             />
                         </div>
@@ -300,7 +286,7 @@ const MainCreazione = () => {
                             <input 
                                 type="number" 
                                 placeholder="500" 
-                                value={newPrice} 
+                                value={newPrice || ''} 
                                 onChange={(e) => setNewPrice(e.target.value)} 
                             />
                         </div>
@@ -318,7 +304,7 @@ const MainCreazione = () => {
                             <input 
                                 type="text" 
                                 placeholder="Bar disco...." 
-                                value={newTitle} 
+                                value={newTitle || ''} 
                                 onChange={(e) => setNewTitle(e.target.value)} 
                             />
 
@@ -326,7 +312,7 @@ const MainCreazione = () => {
                             <input 
                                 type="text" 
                                 placeholder="URL Immagine" 
-                                value={newImageUrl} 
+                                value={newImageUrl || ''} 
                                 onChange={(e) => setNewImageUrl(e.target.value)} 
                             />
                         </div>
@@ -335,7 +321,7 @@ const MainCreazione = () => {
                             <input 
                                 type="text" 
                                 placeholder="Canada" 
-                                value={newState} 
+                                value={newState || ''} 
                                 onChange={(e) => setNewState(e.target.value)} 
                             />
 
@@ -343,7 +329,7 @@ const MainCreazione = () => {
                             <input 
                                 type="text" 
                                 placeholder="Parigi" 
-                                value={newCity} 
+                                value={newCity || ''} 
                                 onChange={(e) => setNewCity(e.target.value)} 
                             />
                         </div>
@@ -352,7 +338,7 @@ const MainCreazione = () => {
                             <input 
                                 type="text" 
                                 placeholder="Sondrio" 
-                                value={newProvincia} 
+                                value={newProvincia || ''} 
                                 onChange={(e) => setNewProvincia(e.target.value)} 
                             />
 
@@ -360,7 +346,7 @@ const MainCreazione = () => {
                             <input 
                                 type="text" 
                                 placeholder="Ostello accogliente e servizi ottimi...." 
-                                value={newDescription} 
+                                value={newDescription || ''} 
                                 onChange={(e) => setNewDescription(e.target.value)} 
                             />
                         </div>
@@ -369,7 +355,7 @@ const MainCreazione = () => {
                             <input 
                                 type="number" 
                                 placeholder="1" 
-                                value={newAdult} 
+                                value={newAdult || ''} 
                                 onChange={(e) => setNewAdult(e.target.value)}
                             />
 
@@ -377,7 +363,7 @@ const MainCreazione = () => {
                             <input 
                                 type="number" 
                                 placeholder="1" 
-                                value={newChild} 
+                                value={newChild || ''} 
                                 onChange={(e) => setNewChild(e.target.value)}
                             />
                         </div>
@@ -387,7 +373,7 @@ const MainCreazione = () => {
                             <input 
                                 type="date" 
                                 placeholder="Data Inizio" 
-                                value={newStartDate} 
+                                value={newStartDate || ''} 
                                 onChange={(e) => setNewStartDate(e.target.value)} 
                             />
 
@@ -395,7 +381,7 @@ const MainCreazione = () => {
                             <input 
                                 type="date" 
                                 placeholder="Data Fine" 
-                                value={newEndDate} 
+                                value={newEndDate || ''} 
                                 onChange={(e) => setNewEndDate(e.target.value)} 
                             />
                         </div>
@@ -405,7 +391,7 @@ const MainCreazione = () => {
                             <input 
                                 type="number" 
                                 placeholder="500" 
-                                value={newPrice} 
+                                value={newPrice || ''} 
                                 onChange={(e) => setNewPrice(e.target.value)} 
                             />
                         </div>
@@ -417,27 +403,31 @@ const MainCreazione = () => {
 
                 <div className="card-container">
                     {data.map((item) => (
-                        <div key={item.id} className = "cardCreazione">
+                        <div key={item.id} className="cardList">
                             <h3>{item.titolo}</h3>
-                            <img src={item.image} alt="immagine copertina" />
+                            {item.image ? (
+                                <img src={item.image} alt="immagine copertina" />
+                            ) : (
+                                <p>Nessuna immagine disponibile</p> // Messaggio di fallback
+                            )}
 
                             <p>Luogo della struttura: {item.stato}</p>
 
-                            <div className = 'divGroup'>
+                            <div className='divGroup'>
                                 <p>Check In: {item.checkIn}</p>
                                 <p>Check Out: {item.checkOut}</p>               
                             </div>
 
-                            <div className = 'divGroup'>
+                            <div className='divGroup'>
                                 <p>camere per adulti: {item.adulti}</p>
                                 <p>camere per bambini: {item.bambini}</p>                           
                             </div>
 
-                            <p>Prezzo della prenotazioen: {item.prezzo}</p>
+                            <p className='m-0 p-3'>Prezzo della prenotazione: {item.prezzo}</p>
 
-                            <div className="buttonGroup"> 
-                                <button className = "button1" onClick={() => handleModifyOpen(item)}>Modifica</button>
-                                <button className = "button2" onClick={() => handleDelete(item.id)}>Elimina</button>
+                            <div id="buttonList"> 
+                                <button id="buttonDCreate1" onClick={() => handleModifyOpen(item)}>Modifica</button>
+                                <button id="buttonDCreate2" onClick={() => handleDelete(item.id)}>Elimina</button>
                             </div>
                         </div>
                     ))}

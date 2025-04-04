@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import GlobalLoading from './GlobalLoading';
 import GlobalError from './GlobalError';
 
@@ -7,6 +8,29 @@ const MainPrenotazioni = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [data, setData] = useState([]);
+
+  /*
+  let id = 57;
+
+  // Recupera la lista dei preferiti esistente da localStorage
+  let prenotazionii = JSON.parse(localStorage.getItem('prenotazioni')) || [];
+
+  // Filtra l'array per rimuovere l'elemento con l'ID specificato
+  prenotazionii = prenotazioni.filter(prenotazioni => prenotazioni.id !== id);
+
+  // Salva nuovamente l'array aggiornato in localStorage
+  localStorage.setItem('prenotazioni', JSON.stringify(prenotazionii));
+
+  // Controlla se l'elemento è stato rimosso con successo
+  if (!prenotazionii.some(prenotazioni => prenotazioni.id === id)) {
+      console.log(`L'elemento con ID ${id} è stato rimosso con successo.`);
+  } else {
+      console.log(`L'elemento con ID ${id} non è stato rimosso.`);
+  }
+      */
+
+  // Mostra il contenuto di localStorage
+  console.log(localStorage);
 
   useEffect(() => {
     const savedPrenotazioni = JSON.parse(localStorage.getItem('prenotazioni')) || [];
@@ -45,6 +69,7 @@ const MainPrenotazioni = () => {
     }
   };
 
+
   const handleAnnullaPrenotazione = (itemId) => {
     const updatedPrenotazioni = prenotazioni.filter(id => id !== itemId);
     setPrenotazioni(updatedPrenotazioni);
@@ -63,33 +88,35 @@ const MainPrenotazioni = () => {
       ) : (
         <div className='d-inline-flex'>
           {data.map(item => (
-            <div key={item.id} className = "cardPrenotazioni">
-                        <h3>{item.titolo}</h3>
+            <div key={item.id} className = "cardList">
+              <h3>{item.titolo}</h3>
                             
-                        <div className='p-2'>
-                            <img src={item.image} alt="immagine copertina" className='imgCopertina' />
-                        </div>                            
+              <div className='p-2'>
+                  <img src={item.image} alt="immagine copertina" className='imgCopertina' />
+              </div>                            
                             
-                        <p>{item.stato}</p>
+              <p>{item.stato}</p>
 
-                        <div className = 'd-flex'>
-                            <p>{item.check_in}</p>
-                            <p>{item.check_out}</p>                      
-                        </div>
+              <div className='divGroup'>
+                  <p>{item.check_in}</p>
+                  <p>{item.check_out}</p>                      
+              </div>
 
-                        <div className = 'd-flex'>
-                            <p>{item.adulti}</p>
-                            <p>{item.bambini}</p>                           
-                        </div>
+              <div className='divGroup'>
+                  <p>{item.adulti}</p>
+                  <p>{item.bambini}</p>                           
+              </div>
 
-                        <p>Price: {item.prezzo}</p>
+              <p>Price: {item.prezzo}</p>
               
-              <button 
-                className='btn btn-danger' 
-                onClick={() => handleAnnullaPrenotazione(item.id)}
-              >
-                Annulla Prenotazione
-              </button>
+              <div id='buttonList'>
+                <Link to={`/Dettaglio/${item.id}`}>
+                    <button className='buttonD'>Vai ai dettagli</button>
+                </Link>   
+                <button className='buttonD' onClick={() => handleAnnullaPrenotazione(item.id)}>
+                  Annulla Prenotazione
+                </button>
+              </div>
             </div>
           ))}
         </div>

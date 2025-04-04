@@ -66,7 +66,7 @@ const HomeModerneMeraviglieMondo = () => {
                                     <h4>{modernWonder.title}</h4>
                                     <p>{modernWonder.description}</p>
                                     <Link to="/list">
-                                        <Button variant="primary">Prenota e vola!</Button>
+                                        <button className = 'buttonD'>Prenota e vola!</button>
                                     </Link>
                                 </Card.Body>
                             </Card>

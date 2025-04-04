@@ -11,13 +11,18 @@ const MainDettaglio = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  //chiamata della fetch tramite id passato per parametri
+  
   useEffect(() => {
+
     const fetchData = async () => {
+
       setLoading(true);
       setError(null);
   
       try {
         const response = await fetch(`http://localhost:8080/api/viaggi/findById/${id}`, {
+
           method: 'GET',
           headers: {
             'Authorization': 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJsZW9uIiwicm9sZXMiOlsiUk9MRV9VU0VSIl0sImlhdCI6MTc0MzA4MDIwNywiZXhwIjoxNzQzOTQ0MjA3fQ.qNzRg0SS0wRcjLW1RdmYAyB1ZHpUur8JYCRZsjiZpzY',
@@ -34,9 +39,11 @@ const MainDettaglio = () => {
         setData(result);
 
       } catch (error) {
+
         console.log(error);
         setError(error);
       } finally {
+
         setLoading(false);
       }
     };
@@ -44,16 +51,22 @@ const MainDettaglio = () => {
     fetchData();
   }, [id]);
 
+  //funzione per le prenotazioni
+
   const handlePrenota = () => {
+
     const existingReservations = JSON.parse(localStorage.getItem('prenotazioni')) || [];
     
-    // Check if the current item's ID is already in the reservations
+    //controlla se l'elemento sia stato o non sia stato gia prenotato
     if (existingReservations.includes(data.data.id)) {
+
       alert('Prenotazione già effettuata per questo elemento!');
     } else {
-      // Save the selected item ID to local storage
+
+      //salva l'elemento nel local storage tramite id
       existingReservations.push(data.data.id);
       localStorage.setItem('prenotazioni', JSON.stringify(existingReservations));
+
       alert('Prenotazione effettuata!');
     }
   };
@@ -70,13 +83,14 @@ const MainDettaglio = () => {
 
   return (
     <>
-      <h1>{data.data.titolo}</h1>
+    <section className = 'BigSectionDettaglio'>
+      <h3>{data.data.titolo}</h3>
 
       <div className='p-2'>
-          <img src={data.data.image} alt="immagine copertina" className='imgCopertina' />
+          <img src={data.data.image} alt="immagine copertina"/>
       </div>       
 
-      <div className='d-inline-flex'>
+      <div className = 'luogoCasa'>
         <span>Luogo di destinazione: </span>
         <p>{data.data.stato}</p>
         <p>{data.data.regione}</p>
@@ -84,41 +98,44 @@ const MainDettaglio = () => {
         <p>{data.data.citta}</p>
       </div>
       
-      <section className='d-flex'>
-        <div className='w-50 p-2'>
+      <section className = 'd-flex bg-light mt-4'>
+        <div className = 'w-50 p-2'>
 
-          <div className = 'd-flex'>
+          <div className = 'maindDettaglio'>
             <p>Stanze per adulti: {data.data.adulti}</p>
             <p>Stanze per i bambini: {data.data.bambini}</p>
           </div>
 
-          <p>Descrizione: {data.data.descrizione}</p>
+          <p className = 'm-0 p-4'>Descrizione: {data.data.descrizione}</p>
         </div>
 
-        <aside className='m-2 me-auto ms-auto'>
+          <aside className = 'm-2 me-auto ms-auto'>
 
-          <div className = 'd-flex'>
-            <p>Data di check-In: {data.data.checkIn}</p>
-            <p>Data di check-Out: {data.data.checkOut}</p>                      
-          </div>
+            <div className = 'maindDettaglio'>
+              <p>Data di check-In: {data.data.checkIn}</p>
+              <p>Data di check-Out: {data.data.checkOut}</p>                      
+            </div>
 
-          <p>Price: ${data.data.prezzo}</p>
+            <p className = 'm-0 p-4'>Price: ${data.data.prezzo}</p>
 
-          {token ? (
-            <button 
-              className = 'btn btn-danger' 
-              onClick={handlePrenota}
-            >
-              Prenota
-            </button>
-          ) : (
-            <Link to = "/">
-              <button className = 'btn btn-primary' >
-                Registrati per prenotare
-              </button>
-            </Link>
-          )}
-        </aside>
+            <div id = 'buttonDettaglio'>
+              {token ? (
+                <button 
+                  className = 'btn btn-danger' 
+                  onClick={handlePrenota}
+                >
+                  Prenota
+                </button>
+              ) : (
+                <Link to = "/">
+                  <button className = 'buttonD'>
+                    Registrati per prenotare
+                  </button>
+                </Link>
+              )}
+            </div>
+          </aside>
+        </section>
       </section>
     </>
   );
