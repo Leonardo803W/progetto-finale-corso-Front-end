@@ -7,9 +7,7 @@ class GlobalNavbar extends Component {
 
   //inizializzazione variabili 
 
-  constructor(props) {    
-    
-    console.log(localStorage)
+  constructor(props) {  
 
     super(props);
     this.state = {
@@ -134,7 +132,7 @@ class GlobalNavbar extends Component {
 
     const { isRegisterModeUser, username, password, email } = this.state;
 
-    let endPointUser = isRegisterModeUser ? 'http://localhost:8080/api/auth/user-register' : 'http://localhost:8080/api/auth/user-login';
+    let endPointUser = isRegisterModeUser ? 'http://localhost:8080/api/auth/user/register' : 'http://localhost:8080/api/auth/account/login';
     let dataUser = isRegisterModeUser ? { username, password, email } : { username, password };
 
 
@@ -142,13 +140,11 @@ class GlobalNavbar extends Component {
 
       localStorage.setItem("isUserToken", response.dataUser.token);
   
-      console.log(dataUser)
       console.log(localStorage);
       console.log(response.dataUser.token);
 
       this.setState({ isAuthenticated: true,  isAlertOpen: true });
-      this.closeModalUser();
-      this.setState({ isAlertOpen: true });
+      this.closeModalAdmin();
 
         //Durate  dell'alert 3 secondi
         setTimeout(() => {
@@ -170,55 +166,67 @@ class GlobalNavbar extends Component {
   };
 
   handleAuthSubmitAdmin = (event) => {
-
-    //prevenzione di lancio fetch non eseguito dall'utente
     event.preventDefault();
-
+  
     const { isRegisterModeAdmin, username, password, email, adminCode, isAdmin } = this.state;
-
-    let endPointAdmin = isRegisterModeAdmin ? 'http://localhost:8080/api/auth/admin-register' : 'http://localhost:8080/api/auth/admin-login';    
-    let dataAdmin = isRegisterModeAdmin ? { username, password, email } : { username, password };
-
-    if (isAdmin) {
-
-        if (adminCode !== 'leo') {
-
-          //lancio alert
-          alert('Invalid admin code');
-          return;
-        }
-
-
-        dataAdmin.adminCode = adminCode; // Include admin code nel data
+  
+    const endPointAdmin = isRegisterModeAdmin 
+      ? 'http://localhost:8080/api/auth/admin/register' 
+      : 'http://localhost:8080/api/auth/account/login';
+  
+    const dataAdmin = isRegisterModeAdmin 
+      ? { username, password, email } 
+      : { username, password };
+  
+    // Controllo adminCode
+    if (isAdmin && adminCode !== 'leo') {
+      alert('Invalid admin code');
+      return;
     }
-
+  
     axios.post(endPointAdmin, dataAdmin).then(response => {
-
-      localStorage.setItem("isAdminToken", response.dataAdmin.adminCode); // Store token admin 
-
-      console.log(dataAdmin)
-      console.log(localStorage);
-      console.log(response.dataAdmin.adminCode)
-
-      this.setState({ isAuthenticated: true, isAdmin: isAdmin, isAlertOpen: true }); // Set admin state and alert
-      this.closeModalAdmin();
-      this.setState({ isAlertOpen: true });
-
-        //Durate  dell'alert 3 secondi
+       
+        localStorage.setItem("authToken", response.data.token);
+        
+        this.setState({ isAuthenticated: true, isAdmin: isAdmin, isAlertOpen: true });
+        this.closeModalAdmin();
+        
+        // Mostra alert per 3 secondi
         setTimeout(() => {
-
-            this.setState({ isAlertOpen: false });
+          this.setState({ isAlertOpen: false });
         }, 3000);
+  
+       
+        const identifier = username;
+        const type = 'username';
+  
+        axios.get('http://localhost:8080/api/auth/account/details', {
+
+          params: {
+            identifier: identifier,
+            type: type
+          }
+        })
+        .then(res => {
+          
+          const userData = res.data;
+          console.log('Dati utente:', userData);
+  
+          this.setState({
+            fetchedUsername: userData.username,
+            avatarUrl: userData.avatar 
+          });
+        })
+        .catch(err => {
+          console.error('Errore nel recupero dei dettagli utente:', err);
+        });
+        
       })
       .catch(error => {
-
         console.error("Authentication error", error);
-
         this.setState({ isAlertOpenError: true });
-
-        // Durata dell'alert 6 secondi
         setTimeout(() => {
-            this.setState({ isAlertOpenError: false });
+          this.setState({ isAlertOpenError: false });
         }, 6000);
       });
   };
