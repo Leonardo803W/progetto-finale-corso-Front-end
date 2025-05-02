@@ -49,6 +49,19 @@ header{
   margin: 1em;
 }
 
+#alertError{
+  position: fixed;
+  z-index: 3;
+  background-color: #ff5454db;
+  width: 80%;
+  text-align: center;
+  left: 8em;
+  top: 7em;
+  padding: 1em;
+  color: #891f1f;
+  border-radius: 15px;
+}
+
 .alertLoginRegister{
   position: fixed;
   z-index: 3;
@@ -73,10 +86,9 @@ header a{
   position: absolute;
   color: black;
   box-shadow: 1px 1px 12px;
-  padding: 1em;
   background: white;
-  left: 20em;
-  top: 10em;
+  left: 13em;
+  top: 20em;
   z-index: 3;
   padding: 2em;
 }

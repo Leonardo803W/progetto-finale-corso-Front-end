@@ -1,22 +1,27 @@
+import axios from "axios";
 import React, { Component } from "react";
 import "react-datepicker/dist/react-datepicker.css";
 import { Link } from "react-router-dom";
-import axios from "axios";
 
 class GlobalNavbar extends Component {
 
   //inizializzazione variabili 
 
-  constructor(props) {
-    super(props);
+  constructor(props) {    
+    
+    console.log(localStorage)
 
+    super(props);
     this.state = {
 
       isAlertOpenBye: false,
       isAlertOpen: false,
+      isAlertOpenError: false,
       isProfileDropdownOpen: false,
-      isModalOpen: false,
-      isRegisterMode: false,
+      isModalOpenAdminLogin: false,
+      isModalOpenUserLogin: false,
+      isRegisterModeUser: false,
+      isRegisterModeAdmin: false,
       username: '',
       password: '',
       email: '',
@@ -57,8 +62,9 @@ class GlobalNavbar extends Component {
     document.addEventListener('click', this.handleClickOutside);
 
     // Controlla se l'utente è loggato
-    const token = localStorage.getItem('token');
-    this.setState({ isAuthenticated: !!token });
+    const tokenUser = localStorage.getItem('isUserToken');
+    const tokenAdmin = localStorage.getItem('isAdminToken');
+    this.setState({ isAuthenticated: !!tokenUser || !!tokenAdmin });  
   }
 
   //funzione che ascolta i click nel momento che il componente viene smontato
@@ -70,23 +76,35 @@ class GlobalNavbar extends Component {
 
   //funzione per aprire la tenda modal per la registrazione o il login
 
-  openModal = (isRegisterMode = false, isAdminMode = false) => {
+  openModalAdmin = (isRegisterModeAdmin = false, isAdminMode = false) => {
 
-    this.setState({ isModalOpen: true, isRegisterMode, isAdmin: isAdminMode });
+    this.setState({ isModalOpenAdminLogin: true, isRegisterModeAdmin, isAdmin: isAdminMode });
+  };
+
+  openModalUser = (isRegisterModeUser = false) => {
+
+    this.setState({ isModalOpenUserLogin: true, isRegisterModeUser });
   };
 
   //funzione per chiudere la tenda modal azzerando di default le variabili e il loro valore
 
-  closeModal = () => {
+  closeModalUser = () => {
 
-    this.setState({ isModalOpen: false, username: '', password: '', email: '', adminCode: '' });
+    this.setState({ isModalOpenUserLogin: false, username: '', password: '', email: '' });
+  };
+
+  closeModalAdmin = () => {
+
+    this.setState({ isModalOpenAdminLogin: false, username: '', password: '', email: '', adminCode: '' });
   };
 
   //funzione per il log out che rimuove il token dato 
 
   handleLogout = () => {
-    localStorage.removeItem("token"); // Clear token
-    localStorage.removeItem("isAdmin"); // Clear admin token
+
+    localStorage.removeItem("isUserToken"); // Clear token
+    localStorage.removeItem("isAdminToken"); // Clear admin token
+
     this.setState({ isAuthenticated: false, isAdmin: false }); // Reset admin state and authentication
 
     this.setState({ isAlertOpenBye: true });
@@ -109,39 +127,27 @@ class GlobalNavbar extends Component {
 
   //fetch per con query per il login o il register dell'utente e il login per l'admin
 
-  handleAuthSubmit = (event) => {
+  handleAuthSubmitUser = (event) => {
 
     //prevenzione di lancio fetch non eseguito dall'utente
     event.preventDefault();
 
-    const { isRegisterMode, username, password, email, adminCode, isAdmin } = this.state;
+    const { isRegisterModeUser, username, password, email } = this.state;
 
-    let endpoint = isRegisterMode ? 'http://localhost:8080/api/auth/register' : 'http://localhost:8080/api/auth/login';
-    let data = isRegisterMode ? { username, password, email } : { username, password };
+    let endPointUser = isRegisterModeUser ? 'http://localhost:8080/api/auth/user-register' : 'http://localhost:8080/api/auth/user-login';
+    let dataUser = isRegisterModeUser ? { username, password, email } : { username, password };
 
-    if (isAdmin) {
 
-        if (adminCode !== 'leo') {
+    axios.post(endPointUser, dataUser).then(response => {
 
-          //lancio alert
-          alert('Invalid admin code');
-          return;
-        }
+      localStorage.setItem("isUserToken", response.dataUser.token);
+  
+      console.log(dataUser)
+      console.log(localStorage);
+      console.log(response.dataUser.token);
 
-        data.adminCode = adminCode; // Include admin code nel data
-        endpoint = 'http://localhost:8080/api/auth/admin-login'; // Assuming you have a separate endpoint for admin login
-    }
-
-    axios.post(endpoint, data).then(response => {
-
-      localStorage.setItem("token", response.data.token); // Store token user
-      localStorage.setItem("isAdmin", response.data.adminCode); // Store token admin 
-
-      console.log(response.data.token)
-      console.log(response.data.adminCode)
-
-      this.setState({ isAuthenticated: true, isAdmin: isAdmin, isAlertOpen: true }); // Set admin state and alert
-      this.closeModal();
+      this.setState({ isAuthenticated: true,  isAlertOpen: true });
+      this.closeModalUser();
       this.setState({ isAlertOpen: true });
 
         //Durate  dell'alert 3 secondi
@@ -152,15 +158,76 @@ class GlobalNavbar extends Component {
       })
       .catch(error => {
 
-           console.error("Authentication error", error);
+        console.error("Authentication error", error);
+
+        this.setState({ isAlertOpenError: true });
+
+        // Durata dell'alert 6 secondi
+        setTimeout(() => {
+            this.setState({ isAlertOpenError: false });
+        }, 6000);
       });
-};
+  };
+
+  handleAuthSubmitAdmin = (event) => {
+
+    //prevenzione di lancio fetch non eseguito dall'utente
+    event.preventDefault();
+
+    const { isRegisterModeAdmin, username, password, email, adminCode, isAdmin } = this.state;
+
+    let endPointAdmin = isRegisterModeAdmin ? 'http://localhost:8080/api/auth/admin-register' : 'http://localhost:8080/api/auth/admin-login';    
+    let dataAdmin = isRegisterModeAdmin ? { username, password, email } : { username, password };
+
+    if (isAdmin) {
+
+        if (adminCode !== 'leo') {
+
+          //lancio alert
+          alert('Invalid admin code');
+          return;
+        }
+
+
+        dataAdmin.adminCode = adminCode; // Include admin code nel data
+    }
+
+    axios.post(endPointAdmin, dataAdmin).then(response => {
+
+      localStorage.setItem("isAdminToken", response.dataAdmin.adminCode); // Store token admin 
+
+      console.log(dataAdmin)
+      console.log(localStorage);
+      console.log(response.dataAdmin.adminCode)
+
+      this.setState({ isAuthenticated: true, isAdmin: isAdmin, isAlertOpen: true }); // Set admin state and alert
+      this.closeModalAdmin();
+      this.setState({ isAlertOpen: true });
+
+        //Durate  dell'alert 3 secondi
+        setTimeout(() => {
+
+            this.setState({ isAlertOpen: false });
+        }, 3000);
+      })
+      .catch(error => {
+
+        console.error("Authentication error", error);
+
+        this.setState({ isAlertOpenError: true });
+
+        // Durata dell'alert 6 secondi
+        setTimeout(() => {
+            this.setState({ isAlertOpenError: false });
+        }, 6000);
+      });
+  };
 
   render() {
 
     //renderizzazione valori delle variabili
 
-    const { isProfileDropdownOpen, isModalOpen, isRegisterMode, isAuthenticated, isAdmin, isAlertOpen, isAlertOpenBye } = this.state;
+    const { isProfileDropdownOpen, isModalOpenUserLogin, isModalOpenAdminLogin, isRegisterModeUser, isRegisterModeAdmin, isAuthenticated, isAdmin, isAlertOpen, isAlertOpenBye, isAlertOpenError } = this.state;
 
     return (
       <>
@@ -184,47 +251,76 @@ class GlobalNavbar extends Component {
           <button className = "profile" onClick={this.toggleProfileDropdown} ref={this.profileDropdownRef}>
            
             {/* Profile Icon */}
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-list me-2" viewBox="0 0 16 16">
-              <path fillRule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5"/>
-            </svg>
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-person-circle" viewBox="0 0 16 16">
-              <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
-              <path fillRule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"/>
-            </svg>
+            <div className = "d-flex align-items-center">
+              {!isAuthenticated ? (
+                  <>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-list me-2" viewBox="0 0 16 16">
+                      <path fillRule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5"/>
+                    </svg>
+
+
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-person-circle" viewBox="0 0 16 16">
+                      <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
+                      <path fillRule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"/>
+                    </svg>  
+                  </>
+                ) : (
+                  <>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-list" viewBox="0 0 16 16">
+                      <path fillRule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5"/>
+                    </svg>
+                    
+                    <p className = "pe-3 ps-3 m-0">nome</p>
+
+                    <img src = "https://placedog.net/50" alt = "immagine profilo" />
+                  </>
+                )}
+            </div>
 
             {/* Profile info */}
-            {isProfileDropdownOpen && !isModalOpen && (
-              <div className = "profileDropdown">
-                <ul>
-                  {!isAuthenticated ? (
-                    <>
-                      <li onClick={() => this.openModal(false)}>Login</li>
-                      <li onClick={() => this.openModal(false, true)}>Admin Login</li>
-                    </>
-                  ) : (
-                    <>
-                      {isAdmin ? (
-                        <>
-                          <li><Link to="/create">Creazione</Link></li>
-                          <li onClick={this.handleLogout}>Logout</li>
-                        </>
-                      ) : (
-                        <>
-                          <li><Link to="/preferiti">Preferiti</Link></li>
-                          <li><Link to="/prenotazioni">prenotazioni</Link></li>
-                          <li onClick={this.handleLogout}>Logout</li>
-                        </>
-                      )}
-                    </>
-                  )}
-                </ul>
-              </div>
-            )}
+            {isProfileDropdownOpen && !isModalOpenUserLogin && !isModalOpenAdminLogin && (
+            <div className="profileDropdown">
+              <ul>
+                {!isAuthenticated ? (
+                  <>
+                    <li onClick={() => this.openModalUser(false)}>User Login</li>
+                    <li onClick={() => this.openModalAdmin(false)}>Admin Login</li>
+                  </>
+                ) : (
+                  <>
+                    {isAdmin ? (
+                      <>
+                        <Link to="/profiloAdmin"><li>Profilo</li></Link>
+                        <Link to="/create"><li>Creazione</li></Link>
+                        <li onClick={this.handleLogout}>Logout</li>
+                      </>
+                    ) : (
+                      <>
+                        <Link to="/profiloUser"><li>Profilo</li></Link>
+                        <Link to="/preferiti"><li>Preferiti</li></Link>
+                        <Link to="/prenotazioni"><li>prenotazioni</li></Link>
+                        <li onClick={this.handleLogout}>Logout</li>
+                      </>
+                    )}
+                  </>
+                )}
+              </ul>
+            </div>
+          )}      
           </button>
         </section>
 
+        {isAlertOpenError && ( 
+        <div id = "alertError">
+          <h4>Sorry mate.</h4>
+            <p>
+               "Controllare i ati inseriti se sono corretti oppure non ti sei ancora registrato per accedere!"
+            </p>
+        </div>
+        )}
+
         {isAlertOpen && ( 
-        <div className="alertLoginRegister">
+        <div className = "alertLoginRegister">
           <h4>Hey, nice to see you</h4>
             <p>
                "accesso effetuato con sucesso!!"
@@ -233,7 +329,7 @@ class GlobalNavbar extends Component {
         )}
 
         {isAlertOpenBye && ( 
-        <div className="alertLoginRegister">
+        <div className = "alertLoginRegister">
           <h4>Hey, see you agein</h4>
             <p>
                "Logout effetuato con sucesso!!"
@@ -242,12 +338,12 @@ class GlobalNavbar extends Component {
         )}
 
         {/* Register or login */}
-        {isModalOpen && (
+        {isModalOpenUserLogin && (
           <div className="modal-overlay">
             <div className="modal-content">
-              <h2 className = "mb-4">{isRegisterMode ? "Registrati" : "Accedi" }</h2>
+              <h2 className = "mb-4">{isRegisterModeUser ? "Registrati" : "Accedi" }</h2>
 
-              <form onSubmit={this.handleAuthSubmit} className = "mb-4">
+              <form onSubmit={this.handleAuthSubmitUser} className = "mb-4">
                 <input
                   type="text"
                   name="username"
@@ -256,7 +352,7 @@ class GlobalNavbar extends Component {
                   onChange={this.handleInputChange}
                   required
                 />
-                {isRegisterMode && (
+                {isRegisterModeUser && (
                   <input
                     type="email"
                     name="email"
@@ -274,7 +370,51 @@ class GlobalNavbar extends Component {
                   onChange={this.handleInputChange}
                   required
                 />
-                {isAdmin && (
+
+                <button className = "button1" type="submit">{isRegisterModeUser ? "Registrati" : "Accedi"}</button>
+                <button className = "button2" type="button" onClick={this.closeModalUser}>Chiudi</button>
+              </form>
+
+              <button onClick={() => this.openModalUser(!isRegisterModeUser)}>
+                {isRegisterModeUser ? "Hai già un account? Accedi" : "Non hai un account? Registrati"}
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Register or login */}
+        {isModalOpenAdminLogin && (
+          <div className="modal-overlay">
+            <div className="modal-content">
+              <h2 className = "mb-4">{isRegisterModeAdmin ? "Registrati" : "Accedi" }</h2>
+
+              <form onSubmit={this.handleAuthSubmitAdmin} className = "mb-4">
+                <input
+                  type="text"
+                  name="username"
+                  placeholder="Username"
+                  value={this.state.username}
+                  onChange={this.handleInputChange}
+                  required
+                />
+                {isRegisterModeAdmin && (
+                  <input
+                    type="email"
+                    name="email"
+                    placeholder="Email"
+                    value={this.state.email}
+                    onChange={this.handleInputChange}
+                    required
+                  />
+                )}
+                <input
+                  type="password"
+                  name="password"
+                  placeholder="Password"
+                  value={this.state.password}
+                  onChange={this.handleInputChange}
+                  required
+                />
                   <input
                     type="text"
                     name="adminCode"
@@ -283,13 +423,13 @@ class GlobalNavbar extends Component {
                     onChange={this.handleInputChange}
                     required
                   />
-                )}
-                <button className = "button1" type="submit">{isRegisterMode ? "Registrati" : "Accedi"}</button>
-                <button className = "button2" type="button" onClick={this.closeModal}>Chiudi</button>
+
+                <button className = "button1" type="submit">{isRegisterModeAdmin ? "Registrati" : "Accedi"}</button>
+                <button className = "button2" type="button" onClick={this.closeModalAdmin}>Chiudi</button>
               </form>
 
-              <button onClick={() => this.openModal(!isRegisterMode)}>
-                {isRegisterMode ? "Hai già un account? Accedi" : "Non hai un account? Registrati"}
+              <button onClick={() => this.openModalAdmin(!isRegisterModeAdmin)}>
+                {isRegisterModeAdmin ? "Hai già un account? Accedi" : "Non hai un account? Registrati"}
               </button>
             </div>
           </div>
@@ -299,4 +439,4 @@ class GlobalNavbar extends Component {
   }
 }
 
-export default GlobalNavbar;
+export default GlobalNavbar;          
