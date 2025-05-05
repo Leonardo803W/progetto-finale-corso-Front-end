@@ -26,6 +26,9 @@ class GlobalNavbar extends Component {
       adminCode: '',
       isAuthenticated: false,
       isAdmin: false,
+
+      nameLog: '',
+      avatarUrl: '',
     };
 
     //utilizzo il ref per poter prendere i valori direttamente dal MOD
@@ -100,7 +103,7 @@ class GlobalNavbar extends Component {
 
   handleLogout = () => {
 
-    localStorage.removeItem("isUserToken"); // Clear token
+    localStorage.removeItem("isUserToken"); // Clear user token
     localStorage.removeItem("isAdminToken"); // Clear admin token
 
     this.setState({ isAuthenticated: false, isAdmin: false }); // Reset admin state and authentication
@@ -138,97 +141,145 @@ class GlobalNavbar extends Component {
 
     axios.post(endPointUser, dataUser).then(response => {
 
-      localStorage.setItem("isUserToken", response.dataUser.token);
-  
-      console.log(localStorage);
-      console.log(response.dataUser.token);
+      console.log(response); 
 
-      this.setState({ isAuthenticated: true,  isAlertOpen: true });
-      this.closeModalAdmin();
+      // controllo risposta token
+      if (response.data && response.data.token) {
 
-        //Durate  dell'alert 3 secondi
+        localStorage.setItem("isUserToken", response.data.token);
+        this.setState({ isAuthenticated: true, isAlertOpen: true });
+        this.closeModalUser();
+
         setTimeout(() => {
-
-            this.setState({ isAlertOpen: false });
+          this.setState({ isAlertOpen: false });
         }, 3000);
+      } 
+
+      const identifier = username;
+      const type = 'username';
+
+      axios.get('http://localhost:8080/api/auth/account/details', {
+
+        // parametri richiesti dall'endPoint
+        params: {
+          identifier: identifier,
+          type: type
+        }
       })
-      .catch(error => {
+      .then(res => {
+        
+        console.log(res);
+        const userData = res.data;
+        console.log('Dati utente:', userData);
 
-        console.error("Authentication error", error);
+        // siccome che setState in React è una funzione asincrona che aggiorna lo stato del componente e, 
+        // opzionalmente, accetta una funzione di callback come secondo parametro. 
+        // Questa funzione di callback viene eseguita dopo che lo stato è stato aggiornato con successo.
+        this.setState({ nameLog: userData.username, avatarUrl: userData.avatar },
+          () => {
 
-        this.setState({ isAlertOpenError: true });
+            // salvo il nome e l'avatar nel locl storage per poterli utilizzare nella globalNavbar,
+            // al posto dell'immagine di profilo dopop che l'utente si sia registrato o fatto il log in.
+            localStorage.setItem('name', this.state.nameLog)
+            localStorage.setItem('avatarUrl', this.state.avatarUrl)
+            console.log(localStorage);
+          }
+        );
 
-        // Durata dell'alert 6 secondi
-        setTimeout(() => {
-            this.setState({ isAlertOpenError: false });
-        }, 6000);
+      })
+      .catch(err => {
+        
+        console.error('Errore nel recupero dei dettagli utente:', err);
       });
+
+    })
+    .catch(error => {
+      console.error("Authentication error", error);
+      this.setState({ isAlertOpenError: true });
+      setTimeout(() => {
+        this.setState({ isAlertOpenError: false });
+      }, 6000);
+    });
   };
 
   handleAuthSubmitAdmin = (event) => {
+
     event.preventDefault();
   
     const { isRegisterModeAdmin, username, password, email, adminCode, isAdmin } = this.state;
   
-    const endPointAdmin = isRegisterModeAdmin 
-      ? 'http://localhost:8080/api/auth/admin/register' 
-      : 'http://localhost:8080/api/auth/account/login';
+    const endPointAdmin = isRegisterModeAdmin ? 'http://localhost:8080/api/auth/admin/register' : 'http://localhost:8080/api/auth/account/login';
+    const dataAdmin = isRegisterModeAdmin ? { username, password, email } : { username, password };
   
-    const dataAdmin = isRegisterModeAdmin 
-      ? { username, password, email } 
-      : { username, password };
-  
-    // Controllo adminCode
-    if (isAdmin && adminCode !== 'leo') {
+    // Ulteriore controllo adminCode per il ruolo admin lato front-and
+    if (adminCode !== 'leo') {
       alert('Invalid admin code');
       return;
     }
   
     axios.post(endPointAdmin, dataAdmin).then(response => {
-       
-        localStorage.setItem("authToken", response.data.token);
-        
-        this.setState({ isAuthenticated: true, isAdmin: isAdmin, isAlertOpen: true });
+
+      console.log(response); 
+
+      // controllo risposta token
+      if (response.data && response.data.token) {
+
+        localStorage.setItem("isAdminToken", response.data.token);
+        this.setState({ isAuthenticated: true, isAdmin: true, isAlertOpen: true });
         this.closeModalAdmin();
-        
-        // Mostra alert per 3 secondi
+        console.log(localStorage);
+
         setTimeout(() => {
           this.setState({ isAlertOpen: false });
         }, 3000);
-  
-       
-        const identifier = username;
-        const type = 'username';
-  
-        axios.get('http://localhost:8080/api/auth/account/details', {
 
-          params: {
-            identifier: identifier,
-            type: type
-          }
-        })
-        .then(res => {
-          
-          const userData = res.data;
-          console.log('Dati utente:', userData);
-  
-          this.setState({
-            fetchedUsername: userData.username,
-            avatarUrl: userData.avatar 
-          });
-        })
-        .catch(err => {
-          console.error('Errore nel recupero dei dettagli utente:', err);
-        });
-        
+      }
+
+      const identifier = username;
+      const type = 'username';
+
+      axios.get('http://localhost:8080/api/auth/account/details', {
+
+        // parametri richiesti dall'endPoint
+        params: {
+          identifier: identifier,
+          type: type
+        }
       })
-      .catch(error => {
-        console.error("Authentication error", error);
-        this.setState({ isAlertOpenError: true });
-        setTimeout(() => {
-          this.setState({ isAlertOpenError: false });
-        }, 6000);
+      .then(res => {
+        
+        console.log(res);
+        const userData = res.data;
+        console.log('Dati utente:', userData);
+
+        // siccome che setState in React è una funzione asincrona che aggiorna lo stato del componente e, 
+        // opzionalmente, accetta una funzione di callback come secondo parametro. 
+        // Questa funzione di callback viene eseguita dopo che lo stato è stato aggiornato con successo.
+        this.setState({ nameLog: userData.username, avatarUrl: userData.avatar },
+          () => {
+
+            // salvo il nome e l'avatar nel locl storage per poterli utilizzare nella globalNavbar,
+            // al posto dell'immagine di profilo dopop che l'utente si sia registrato o fatto il log in.
+            localStorage.setItem('name', this.state.nameLog)
+            localStorage.setItem('avatarUrl', this.state.avatarUrl)
+            console.log(localStorage);
+          }
+        );
+
+      })
+      .catch(err => {
+        
+        console.error('Errore nel recupero dei dettagli utente:', err);
       });
+
+    })
+    .catch(error => {
+      console.error("Authentication error", error);
+      this.setState({ isAlertOpenError: true });
+      setTimeout(() => {
+        this.setState({ isAlertOpenError: false });
+      }, 6000);
+    });
   };
 
   render() {
