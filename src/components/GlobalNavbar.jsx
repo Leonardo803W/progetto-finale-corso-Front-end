@@ -25,8 +25,6 @@ class GlobalNavbar extends Component {
       email: '',
       adminCode: '',
       isAuthenticated: false,
-      isAdmin: false,
-
       nameLog: '',
       avatarUrl: '',
     };
@@ -77,9 +75,9 @@ class GlobalNavbar extends Component {
 
   //funzione per aprire la tenda modal per la registrazione o il login
 
-  openModalAdmin = (isRegisterModeAdmin = false, isAdminMode = false) => {
+  openModalAdmin = (isRegisterModeAdmin = false) => {
 
-    this.setState({ isModalOpenAdminLogin: true, isRegisterModeAdmin, isAdmin: isAdminMode });
+    this.setState({ isModalOpenAdminLogin: true, isRegisterModeAdmin });
   };
 
   openModalUser = (isRegisterModeUser = false) => {
@@ -106,13 +104,16 @@ class GlobalNavbar extends Component {
     localStorage.removeItem("isUserToken"); // Clear user token
     localStorage.removeItem("isAdminToken"); // Clear admin token
 
-    this.setState({ isAuthenticated: false, isAdmin: false }); // Reset admin state and authentication
+    // cambio il valore dell'item di isAdmin come booleano
+    localStorage.setItem('isAdmin', JSON.stringify(false));
+
+    this.setState({ isAuthenticated: false }); // Reset state authentication
 
     this.setState({ isAlertOpenBye: true });
 
+    // Durata visualizzazione dell'alert
     setTimeout(() => {
       
-      // Durata visualizzazione dell'alert
       this.setState({ isAlertOpenBye: false });
       window.location.href = '/'; // Reindirizza alla homepage utilizzando window.location
 
@@ -141,7 +142,7 @@ class GlobalNavbar extends Component {
 
     axios.post(endPointUser, dataUser).then(response => {
 
-      console.log(response); 
+      //console.log(response); 
 
       // controllo risposta token
       if (response.data && response.data.token) {
@@ -168,9 +169,9 @@ class GlobalNavbar extends Component {
       })
       .then(res => {
         
-        console.log(res);
+        //console.log(res);
         const userData = res.data;
-        console.log('Dati utente:', userData);
+        //console.log('Dati utente:', userData);
 
         // siccome che setState in React è una funzione asincrona che aggiorna lo stato del componente e, 
         // opzionalmente, accetta una funzione di callback come secondo parametro. 
@@ -182,7 +183,7 @@ class GlobalNavbar extends Component {
             // al posto dell'immagine di profilo dopop che l'utente si sia registrato o fatto il log in.
             localStorage.setItem('name', this.state.nameLog)
             localStorage.setItem('avatarUrl', this.state.avatarUrl)
-            console.log(localStorage);
+            //console.log(localStorage);
           }
         );
 
@@ -194,8 +195,10 @@ class GlobalNavbar extends Component {
 
     })
     .catch(error => {
+
       console.error("Authentication error", error);
       this.setState({ isAlertOpenError: true });
+
       setTimeout(() => {
         this.setState({ isAlertOpenError: false });
       }, 6000);
@@ -206,7 +209,7 @@ class GlobalNavbar extends Component {
 
     event.preventDefault();
   
-    const { isRegisterModeAdmin, username, password, email, adminCode, isAdmin } = this.state;
+    const { isRegisterModeAdmin, username, password, email, adminCode } = this.state;
   
     const endPointAdmin = isRegisterModeAdmin ? 'http://localhost:8080/api/auth/admin/register' : 'http://localhost:8080/api/auth/account/login';
     const dataAdmin = isRegisterModeAdmin ? { username, password, email } : { username, password };
@@ -219,15 +222,18 @@ class GlobalNavbar extends Component {
   
     axios.post(endPointAdmin, dataAdmin).then(response => {
 
-      console.log(response); 
+      //console.log(response); 
 
       // controllo risposta token
       if (response.data && response.data.token) {
 
         localStorage.setItem("isAdminToken", response.data.token);
-        this.setState({ isAuthenticated: true, isAdmin: true, isAlertOpen: true });
+        this.setState({ isAuthenticated: true, isAlertOpen: true });
+
+        // cambio il valore dell'item di isAdmin come booleano
+        localStorage.setItem('isAdmin', JSON.stringify(true));
         this.closeModalAdmin();
-        console.log(localStorage);
+        //console.log(localStorage);
 
         setTimeout(() => {
           this.setState({ isAlertOpen: false });
@@ -248,9 +254,9 @@ class GlobalNavbar extends Component {
       })
       .then(res => {
         
-        console.log(res);
+        //console.log(res);
         const userData = res.data;
-        console.log('Dati utente:', userData);
+        //console.log('Dati utente:', userData);
 
         // siccome che setState in React è una funzione asincrona che aggiorna lo stato del componente e, 
         // opzionalmente, accetta una funzione di callback come secondo parametro. 
@@ -262,7 +268,7 @@ class GlobalNavbar extends Component {
             // al posto dell'immagine di profilo dopop che l'utente si sia registrato o fatto il log in.
             localStorage.setItem('name', this.state.nameLog)
             localStorage.setItem('avatarUrl', this.state.avatarUrl)
-            console.log(localStorage);
+            //console.log(localStorage);
           }
         );
 
@@ -274,19 +280,23 @@ class GlobalNavbar extends Component {
 
     })
     .catch(error => {
+      
       console.error("Authentication error", error);
       this.setState({ isAlertOpenError: true });
+
       setTimeout(() => {
         this.setState({ isAlertOpenError: false });
       }, 6000);
     });
   };
 
+  getIsAdmin = () => JSON.parse(localStorage.getItem('isAdmin'));
+
   render() {
 
     //renderizzazione valori delle variabili
 
-    const { isProfileDropdownOpen, isModalOpenUserLogin, isModalOpenAdminLogin, isRegisterModeUser, isRegisterModeAdmin, isAuthenticated, isAdmin, isAlertOpen, isAlertOpenBye, isAlertOpenError } = this.state;
+    const { isProfileDropdownOpen, isModalOpenUserLogin, isModalOpenAdminLogin, isRegisterModeUser, isRegisterModeAdmin, isAuthenticated, isAlertOpen, isAlertOpenBye, isAlertOpenError } = this.state;
 
     return (
       <>
@@ -329,9 +339,15 @@ class GlobalNavbar extends Component {
                       <path fillRule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5"/>
                     </svg>
                     
-                    <p className = "pe-3 ps-3 m-0">nome</p>
+                    <p className = "pe-3 ps-3 m-0">{localStorage.getItem('name')}</p>
 
-                    <img src = "https://placedog.net/50" alt = "immagine profilo" />
+                    {localStorage.getItem('avatarUrl') !== 'null' && localStorage.getItem('avatarUrl') !== null ? (
+
+                      <img src={localStorage.getItem('avatarUrl')} alt="immagine profilo" />
+                    ) : (
+                      <img src="https://placedog.net/50/" alt="immagine profilo" />
+                    )}
+                    
                   </>
                 )}
             </div>
@@ -347,7 +363,9 @@ class GlobalNavbar extends Component {
                   </>
                 ) : (
                   <>
-                    {isAdmin ? (
+
+                      {/* Leggo il valore di isAdmin dal localStorage come booleano */}
+                      {JSON.parse(localStorage.getItem('isAdmin')) ? (
                       <>
                         <Link to="/profiloAdmin"><li>Profilo</li></Link>
                         <Link to="/create"><li>Creazione</li></Link>

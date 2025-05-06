@@ -27,20 +27,26 @@ const MainCreazione = () => {
 
 
     useEffect(() => {
+        
         const fetchData = async () => {
+            
             setLoading(true);
             setError(false);
+
+            const token = localStorage.getItem('isAdminToken'); // ottengo il token dal localStorage
+
             try {
                 const response = await fetch('http://localhost:8080/api/viaggi/fetchall', {
+
                     method: 'GET',
                     headers: {
-                        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJsZW9uIiwicm9sZXMiOlsiUk9MRV9VU0VSIl0sImlhdCI6MTc0MzA4MDIwNywiZXhwIjoxNzQzOTQ0MjA3fQ.qNzRg0SS0wRcjLW1RdmYAyB1ZHpUur8JYCRZsjiZpzY',
+                        'Authorization': `Bearer ${token}`,
                         'Content-Type': 'application/json',
                     },
                 });
 
                 if (!response.ok) {
-                    throw new Error('Network response was not ok');
+                    throw new Error(`Network response was not ok, status: ${response.status}`);
                 }
 
                 const result = await response.json();
@@ -98,6 +104,7 @@ const MainCreazione = () => {
       };
 
     const handleDelete = async (id) => {
+
         const confirmDelete = window.confirm('Sei sicuro di voler eliminare questo elemento?');
 
         if (confirmDelete) {
@@ -122,14 +129,20 @@ const MainCreazione = () => {
     };
 
     const handleCreate = async () => {
+
         if (newTitle && newDescription) {
             try {
+
+                const token = localStorage.getItem('isAdminToken');
+
                 const response = await fetch(`http://localhost:8080/api/viaggi/save`, {
+
                     method: 'POST',
                     headers: {
-                        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJsZW9uIiwicm9sZXMiOlsiUk9MRV9VU0VSIl0sImlhdCI6MTc0MzA4MDIwNywiZXhwIjoxNzQzOTQ0MjA3fQ.qNzRg0SS0wRcjLW1RdmYAyB1ZHpUur8JYCRZsjiZpzY',
+                        'Authorization': `Bearer ${token}`,
                         'Content-Type': 'application/json',
                     },
+
                     body: JSON.stringify({ 
                         titolo: newTitle, 
                         image: newImageUrl,
@@ -137,9 +150,9 @@ const MainCreazione = () => {
                         provincia: newProvincia, 
                         citta: newCity, 
                         descrizione: newDescription,
-                        prezzo: newPrice, // Assicurati che sia un numero
-                        adulti: newAdult, // Assicurati che sia un numero
-                        bambini: newChild, // Assicurati che sia un numero
+                        prezzo: newPrice,
+                        adulti: newAdult,
+                        bambini: newChild,
                         checkIn: newStartDate, 
                         checkOut: newEndDate, 
                     }),
@@ -153,18 +166,22 @@ const MainCreazione = () => {
                 setData(prevData => [...prevData, newItem]);
                 resetFields();
                 setWindowOpen(false); // Chiude la finestra di creazione
+
             } catch (error) {
+
                 console.error('Error during creation:', error);
             }
         }
     };
 
     const handleCreateOpen = () => {
+
         resetFields(); // Resetta i campi per la creazione
         setWindowOpen(true); // Apre la sezione di creazione
     }
 
     const resetFields = () => {
+
         setNewTitle('');
         setNewImageUrl('');
         setNewState('');
@@ -180,6 +197,7 @@ const MainCreazione = () => {
     };
 
     const handleCancel = () => {
+
         resetFields(); // Resetta i campi
         setWindowOpen(false); // Chiude la sezione di creazione
         setWindowOpenModify(false); // Chiude la sezione di modifica
@@ -402,35 +420,54 @@ const MainCreazione = () => {
                 )}
 
                 <div className="card-container">
-                    {data.map((item) => (
+                {Array.isArray(data) && data.length > 0 ? (
+
+                    data.map((item) => (
+
                         <div key={item.id} className="cardList">
+
+                        {item.titolo !== 'null' && item.titolo !== null ? (
+
                             <h3>{item.titolo}</h3>
-                            {item.image ? (
-                                <img src={item.image} alt="immagine copertina" />
-                            ) : (
-                                <p>Nessuna immagine disponibile</p> // Messaggio di fallback
-                            )}
+                        ) : (
+                            <h3>Bar Beeach</h3>
+                        )}
 
-                            <p>Luogo della struttura: {item.stato}</p>
+                        {item.image !== 'null' && item.image !== null ? (
 
-                            <div className='divGroup'>
-                                <p>Check In: {item.checkIn}</p>
-                                <p>Check Out: {item.checkOut}</p>               
-                            </div>
+                            <img src = {item.image} alt = "immagine copertina" />
+                        ) : (
+                            <img src = "https://res.cloudinary.com/dz4gkzrpj/image/upload/v1739531459/samples/landscapes/beach-boat.jpg" alt = "immagine copertina" />
+                        )}
 
-                            <div className='divGroup'>
-                                <p>camere per adulti: {item.adulti}</p>
-                                <p>camere per bambini: {item.bambini}</p>                           
-                            </div>
+                        {item.stato !== 'null' && item.stato !== null ? (
 
-                            <p className='m-0 p-3'>Prezzo della prenotazione: {item.prezzo}</p>
+                        <img src = {item.stato} alt = "immagine copertina" />
+                        ) : (
+                        <img src = "https://res.cloudinary.com/dz4gkzrpj/image/upload/v1739531459/samples/landscapes/beach-boat.jpg" alt = "immagine copertina" />
+                        )}
 
-                            <div id="buttonList"> 
-                                <button id="buttonDCreate1" onClick={() => handleModifyOpen(item)}>Modifica</button>
-                                <button id="buttonDCreate2" onClick={() => handleDelete(item.id)}>Elimina</button>
-                            </div>
+                        <div className='divGroup'>
+                            <p>Check In: {item.checkIn}</p>
+                            <p>Check Out: {item.checkOut}</p>               
                         </div>
-                    ))}
+
+                        <div className='divGroup'>
+                            <p>camere per adulti: {item.adulti}</p>
+                            <p>camere per bambini: {item.bambini}</p>                           
+                        </div>
+
+                        <p className='m-0 p-3'>Prezzo della prenotazione: {item.prezzo}</p>
+
+                        <div id="buttonList"> 
+                            <button id="buttonDCreate1" onClick={() => handleModifyOpen(item)}>Modifica</button>
+                            <button id="buttonDCreate2" onClick={() => handleDelete(item.id)}>Elimina</button>
+                        </div>
+                    </div>
+                    ))
+                ) : (
+                    <p>Nessun dato disponibile</p>
+                )}
                 </div>
             </section>
         </>
