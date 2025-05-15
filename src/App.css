@@ -333,6 +333,7 @@ main{
 }
 
 .cardList{
+  width: 30%;
   margin: 1em;
   background-color: white;
   padding: 1em;

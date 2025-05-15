@@ -25,7 +25,6 @@ const MainCreazione = () => {
     const [newEndDate, setNewEndDate] = useState('');
     const [inputValue, setInputValue] = useState('');
 
-
     useEffect(() => {
         
         const fetchData = async () => {
@@ -82,13 +81,18 @@ const MainCreazione = () => {
     };
 
     const handleModify = async (id, data) => {
+
+        const token = localStorage.getItem('isAdminToken');
+
         try {
           const response = await fetch(`http://localhost:8080/api/viaggi/modifyById/${id}`, {
+
             method: 'PUT',
             headers: {
-              'Authorization': 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJsZW9uIiwicm9sZXMiOlsiUk9MRV9VU0VSIl0sImlhdCI6MTc0MzA4MDIwNywiZXhwIjoxNzQzOTQ0MjA3fQ.qNzRg0SS0wRcjLW1RdmYAyB1ZHpUur8JYCRZsjiZpzY',
+              'Authorization': `Bearer ${token}`,
               'Content-Type': 'application/json',
             },
+            
             body: JSON.stringify(data),
           });
       
@@ -130,7 +134,6 @@ const MainCreazione = () => {
 
     const handleCreate = async () => {
 
-        if (newTitle && newDescription) {
             try {
 
                 const token = localStorage.getItem('isAdminToken');
@@ -162,8 +165,6 @@ const MainCreazione = () => {
                     throw new Error('Network response was not ok');
                 }
 
-                const newItem = await response.json();
-                setData(prevData => [...prevData, newItem]);
                 resetFields();
                 setWindowOpen(false); // Chiude la finestra di creazione
 
@@ -171,7 +172,6 @@ const MainCreazione = () => {
 
                 console.error('Error during creation:', error);
             }
-        }
     };
 
     const handleCreateOpen = () => {
@@ -420,44 +420,53 @@ const MainCreazione = () => {
                 )}
 
                 <div className="card-container">
-                {Array.isArray(data) && data.length > 0 ? (
+                {Array.isArray(data.content) && data.content.length > 0 ? (
 
-                    data.map((item) => (
+                    data.content.map((item) => (
 
                         <div key={item.id} className="cardList">
 
-                        {item.titolo !== 'null' && item.titolo !== null ? (
+                        {item.titolo !== '' && item.titolo !== null ? (
 
                             <h3>{item.titolo}</h3>
                         ) : (
                             <h3>Bar Beeach</h3>
                         )}
 
-                        {item.image !== 'null' && item.image !== null ? (
+                        {item.image !== '' && item.image !== null ? (
 
-                            <img src = {item.image} alt = "immagine copertina" />
+                            <img className = 'w-100' src = {item.image} alt = "immagine copertina" />
                         ) : (
-                            <img src = "https://res.cloudinary.com/dz4gkzrpj/image/upload/v1739531459/samples/landscapes/beach-boat.jpg" alt = "immagine copertina" />
+                            <img className = 'w-100' src = "https://res.cloudinary.com/dz4gkzrpj/image/upload/v1739531459/samples/landscapes/beach-boat.jpg" alt = "immagine copertina" />
                         )}
 
-                        {item.stato !== 'null' && item.stato !== null ? (
+                        {item.stato !== '' && item.stato !== null ? (
 
-                        <img src = {item.stato} alt = "immagine copertina" />
+                        <h3>{item.stato}</h3>
                         ) : (
-                        <img src = "https://res.cloudinary.com/dz4gkzrpj/image/upload/v1739531459/samples/landscapes/beach-boat.jpg" alt = "immagine copertina" />
+                            <h3>Italia</h3>
                         )}
+
+                        {item.checkIn !== '' && item.checkIn !== null ? (
 
                         <div className='divGroup'>
                             <p>Check In: {item.checkIn}</p>
                             <p>Check Out: {item.checkOut}</p>               
                         </div>
+                        ) : null}
+                        
+                        {item.adulti !== '' && item.adulti !== null ? (
 
                         <div className='divGroup'>
                             <p>camere per adulti: {item.adulti}</p>
                             <p>camere per bambini: {item.bambini}</p>                           
                         </div>
+                        ) : null}
+
+                        {item.prezzo !== '' && item.prezzo !== null ? (
 
                         <p className='m-0 p-3'>Prezzo della prenotazione: {item.prezzo}</p>
+                        ) : null}
 
                         <div id="buttonList"> 
                             <button id="buttonDCreate1" onClick={() => handleModifyOpen(item)}>Modifica</button>
@@ -465,6 +474,7 @@ const MainCreazione = () => {
                         </div>
                     </div>
                     ))
+
                 ) : (
                     <p>Nessun dato disponibile</p>
                 )}
