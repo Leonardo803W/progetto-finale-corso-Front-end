@@ -9,7 +9,6 @@ const MainCreazione = () => {
     const [error, setError] = useState(false);
     const [windowOpen, setWindowOpen] = useState(false);
     const [windowOpenModify, setWindowOpenModify] = useState(false);
-    const [currentId, setCurrentId] = useState(null);
 
     // Stato per i campi di input
     const [newTitle, setNewTitle] = useState('');
@@ -76,56 +75,84 @@ const MainCreazione = () => {
         setNewChild(item.bambini);
         setNewStartDate(item.checkIn);
         setNewEndDate(item.checkOut);
-        setCurrentId(item.id);
+        localStorage.setItem('id', item.id)
         setWindowOpenModify(true);
     };
 
-    const handleModify = async (id, data) => {
-
+    const handleModify = async () => {
         const token = localStorage.getItem('isAdminToken');
+        const id = localStorage.getItem('id');
 
         try {
-          const response = await fetch(`http://localhost:8080/api/viaggi/modifyById/${id}`, {
+            const response = await fetch(`http://localhost:8080/api/viaggi/modifyById/${id}`, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    titolo: newTitle,
+                    image: newImageUrl,
+                    stato: newState,
+                    provincia: newProvincia,
+                    citta: newCity,
+                    descrizione: newDescription,
+                    prezzo: newPrice,
+                    adulti: newAdult,
+                    bambini: newChild,
+                    checkIn: newStartDate,
+                    checkOut: newEndDate,
+                }),
+            });
 
-            method: 'PUT',
-            headers: {
-              'Authorization': `Bearer ${token}`,
-              'Content-Type': 'application/json',
-            },
+            console.log(response)
             
-            body: JSON.stringify(data),
-          });
-      
-          if (!response.ok) {
-            throw new Error('Network response was not ok');
-          }
-      
-          const result = await response.json();
-          console.log('Success:', result);
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+    
+            const result = await response.json();
+            const updatedItem = result.data;
+
+            setData(prevData => ({
+              ...prevData,
+              content: prevData.content.map(item =>
+                item.id === id ? updatedItem : item
+              ),
+            }));
+
+        resetFields(); // Resetta i campi
+        setWindowOpenModify(false); // Chiude la sezione di modifica
+
         } catch (error) {
-          console.error('Error during modification:', error);
+            console.error('Error during modification:', error);
         }
-      };
+    }
 
     const handleDelete = async (id) => {
-
+        const token = localStorage.getItem('isAdminToken');
         const confirmDelete = window.confirm('Sei sicuro di voler eliminare questo elemento?');
-
+    
         if (confirmDelete) {
             try {
                 const response = await fetch(`http://localhost:8080/api/viaggi/deleteById/${id}`, {
                     method: 'DELETE',
                     headers: {
-                        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJsZW9uIiwicm9sZXMiOlsiUk9MRV9VU0VSIl0sImlhdCI6MTc0MzA4MDIwNywiZXhwIjoxNzQzOTQ0MjA3fQ.qNzRg0SS0wRcjLW1RdmYAyB1ZHpUur8JYCRZsjiZpzY',
+                        'Authorization': `Bearer ${token}`,
                         'Content-Type': 'application/json',
                     },
                 });
-
+    
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
-
-                setData(prevData => prevData.filter(item => item.id !== id));
+    
+                // Rimuovo l'elemento dall'array
+                setData(prevData => ({
+                    ...prevData,
+                    content: prevData.content.filter(item => item.id !== id)
+                }));
+                
             } catch (error) {
                 console.error('Error during deletion:', error);
             }
@@ -133,45 +160,47 @@ const MainCreazione = () => {
     };
 
     const handleCreate = async () => {
-
-            try {
-
-                const token = localStorage.getItem('isAdminToken');
-
-                const response = await fetch(`http://localhost:8080/api/viaggi/save`, {
-
-                    method: 'POST',
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json',
-                    },
-
-                    body: JSON.stringify({ 
-                        titolo: newTitle, 
-                        image: newImageUrl,
-                        stato: newState, 
-                        provincia: newProvincia, 
-                        citta: newCity, 
-                        descrizione: newDescription,
-                        prezzo: newPrice,
-                        adulti: newAdult,
-                        bambini: newChild,
-                        checkIn: newStartDate, 
-                        checkOut: newEndDate, 
-                    }),
-                });
-
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-
-                resetFields();
-                setWindowOpen(false); // Chiude la finestra di creazione
-
-            } catch (error) {
-
-                console.error('Error during creation:', error);
+        try {
+            const token = localStorage.getItem('isAdminToken');
+            const response = await fetch(`http://localhost:8080/api/viaggi/save`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ 
+                    titolo: newTitle, 
+                    image: newImageUrl,
+                    stato: newState, 
+                    provincia: newProvincia, 
+                    citta: newCity, 
+                    descrizione: newDescription,
+                    prezzo: newPrice,
+                    adulti: newAdult,
+                    bambini: newChild,
+                    checkIn: newStartDate, 
+                    checkOut: newEndDate, 
+                }),
+            });
+    
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
             }
+    
+            const result = await response.json();
+    
+            // Aggiungo il nuovo elemento alla lista
+            setData(prevData => ({
+                ...prevData,
+                content: [result.data, ...prevData.content]
+            }));
+    
+            resetFields();
+            setWindowOpen(false);
+    
+        } catch (error) {
+            console.error('Error during creation:', error);
+        }
     };
 
     const handleCreateOpen = () => {
@@ -193,7 +222,7 @@ const MainCreazione = () => {
         setNewChild('');
         setNewStartDate('');
         setNewEndDate('');
-        setCurrentId(null); // Resetta l'ID corrente
+        localStorage.removeItem('id');
     };
 
     const handleCancel = () => {
