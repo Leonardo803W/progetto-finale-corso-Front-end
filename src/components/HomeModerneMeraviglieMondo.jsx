@@ -19,47 +19,48 @@ const HomeModerneMeraviglieMondo = () => {
         {
             title: "Petra",
             image: imageM1,
-            description: "Visita Petra un sito archeologico della Giordania, posto a circa 250 km a sud della capitale Amman, costruito 2000 anni fa, una struttura scavata nella roccia, situata a metà strada tra il Golfo di Aqaba e il Mar Morto, a un'altitudine tra 800 e 1396 metri!"
+            description: "Antica città scavata nella roccia in Giordania, famosa per le sue strutture scolpite nella pietra, simbolo di ingegneria e arte antica."
         },
         {
             title: "Grande Muraglia Cinese",
             image: imageM2,
-            description: "Visita la Grande Muraglia, una struttura mastodontica in cui nonostante i secoli trascorsi ancora oggi possibile percorrerla quasi del tutto, costruita a partire dal 214 a.C. e lunga 8 851 km una impresa titanica a visitarla tutta!"
+            description: "Una delle meraviglie più impressionanti del mondo, questa lunga muraglia difensiva attraversa le montagne e le pianure della Cina."
         },
         {
             title: "Colosseo",
             image: imageM3,
-            description: "Visita il Colosseo durate nei secoli e fonte di ispirazioni per grandissimi film storici, L'anfiteatro fu edificato in epoca flavia, La sua costruzione, iniziata nel 70 d.C. e fu conclusa nell'80 d.C.!"
+            description: "Il simbolo dell'antica Roma, un anfiteatro grandioso dove si svolgevano combattimenti e spettacoli pubblici."
         },
         {
             title: "Machu Picchu",
             image: imageM4,
-            description: "Visita Machu Picchu costruita nell'anno 1440, nella valle dell'Urubamba, a circa 2 430 m, ancora adesso una città ricoperta da misteri!"
+            description: "La misteriosa città inca sulle Ande peruviane, un esempio di ingegneria e spiritualità, avvolta da un'aura di mistero."
         },
         {
             title: "Cristo Redentore",
             image: imageM5,
-            description: "Visita il Cristo Redentore la statua, fatta di calcestruzzo e pietra saponaria e costruita fra il 1922 e il 1931, un luogo molto religioso!"
+            description: "La statua iconica di Rio de Janeiro, simbolo di pace e accoglienza, che domina la città con le sue braccia aperte."
         },
         {
             title: "Chichén Itzá",
             image: imageM6,
-            description: "Visita Chichén Itzá Le rovine si estendono su un'area di 3 km², appartenevano ad una grande città che fu uno dei più importanti centri della regione intorno al periodo epiclassico della civiltà Maya, fra il VI e l'XI secolo!"
+            description: "Uno dei siti più importanti della civiltà Maya, con le sue piramidi e templi che raccontano storie di antiche civiltà."
         },
         {
             title: "Taj Mahal",
             image: imageM7,
-            description: "Visita Taj Mahal costruito nel 1632 dall'imperatore moghul Shāh Jahān in memoria dell'amatissima moglie Arjumand Banu Begum, un esempio di cosa l'amore può costruire!"
+            description: "Il mausoleo di marmo bianco in India, simbolo eterno di amore e bellezza, costruito dall'imperatore Shah Jahan."
         }
     ];
 
     return (
         <>
-            {/* Card */}
             <section className='bigSection'>
+
                 <div className="card-container">
                     {arrayModern.map((modernWonder, index) => (
                         <div className='card-wrapper' key={index}>
+
                             <Card className='w-100 h-100'>
                                 <Card.Img variant="top" src={modernWonder.image} alt='immagine copertina' className='w-100 h-50'/>
                                 <Card.Body>
@@ -70,9 +71,11 @@ const HomeModerneMeraviglieMondo = () => {
                                     </Link>
                                 </Card.Body>
                             </Card>
+                            
                         </div>
                     ))}
                 </div>
+
             </section>
         </>
     );

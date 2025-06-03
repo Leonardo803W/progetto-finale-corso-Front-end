@@ -11,8 +11,7 @@ const MainDettaglio = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  //chiamata della fetch tramite id passato per parametri
-  
+  //chiamata della fetch tramite id passato per parametro
   useEffect(() => {
 
     const fetchData = async () => {
@@ -23,9 +22,11 @@ const MainDettaglio = () => {
       try {
         const response = await fetch(`http://localhost:8080/api/viaggi/findById/${id}`, {
 
+          // il token viene dato un pubblico per poter fare vedere all'utente anche se non e registrato
+
           method: 'GET',
           headers: {
-            'Authorization': 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJsZW9uIiwicm9sZXMiOlsiUk9MRV9VU0VSIl0sImlhdCI6MTc0MzA4MDIwNywiZXhwIjoxNzQzOTQ0MjA3fQ.qNzRg0SS0wRcjLW1RdmYAyB1ZHpUur8JYCRZsjiZpzY',
+            'Authorization': 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJuZWxzb24iLCJyb2xlcyI6WyJST0xFX0FETUlOIl0sImlhdCI6MTc0ODYxMTYzOSwiZXhwIjoxNzQ5NDc1NjM5fQ.eT4yPYnugm979dlrIV9mzbjwECWdixz25V2FFXcVI-o',
             'Content-Type': 'application/json'
           },
         });
@@ -42,6 +43,7 @@ const MainDettaglio = () => {
 
         console.log(error);
         setError(error);
+
       } finally {
 
         setLoading(false);
@@ -52,7 +54,6 @@ const MainDettaglio = () => {
   }, [id]);
 
   //funzione per le prenotazioni
-
   const handlePrenota = () => {
 
     const existingReservations = JSON.parse(localStorage.getItem('prenotazioni')) || [];
@@ -61,6 +62,7 @@ const MainDettaglio = () => {
     if (existingReservations.includes(data.data.id)) {
 
       alert('Prenotazione già effettuata per questo elemento!');
+      
     } else {
 
       //salva l'elemento nel local storage tramite id
@@ -79,7 +81,8 @@ const MainDettaglio = () => {
     return <GlobalError />; 
   }
 
-  const token = localStorage.getItem('token');
+  console.log(localStorage)
+  const token = localStorage.getItem('authToken');
 
   return (
     <>

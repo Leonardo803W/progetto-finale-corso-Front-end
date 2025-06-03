@@ -10,7 +10,7 @@ const MainCreazione = () => {
     const [windowOpen, setWindowOpen] = useState(false);
     const [windowOpenModify, setWindowOpenModify] = useState(false);
 
-    // Stato per i campi di input
+    // Stato per i campi di input per le varie fetch
     const [newTitle, setNewTitle] = useState('');
     const [newImageUrl, setNewImageUrl] = useState('');
     const [newState, setNewState] = useState('');
@@ -24,6 +24,7 @@ const MainCreazione = () => {
     const [newEndDate, setNewEndDate] = useState('');
     const [inputValue, setInputValue] = useState('');
 
+    // fetch per visualizzare tutti gli elementi gia esistenti
     useEffect(() => {
         
         const fetchData = async () => {
@@ -50,6 +51,7 @@ const MainCreazione = () => {
                 const result = await response.json();
                 console.log(result)
                 setData(result.data);
+                
             } catch (error) {
                 setError(error);
             } finally {
@@ -60,108 +62,17 @@ const MainCreazione = () => {
         fetchData();
     }, []);
 
+    // chiamo l'animazione per far intendere all'utente che vi e un caricamento in corso
     if (loading) { return <GlobalLoading />; }
     if (error) { return <GlobalError />; }
 
-    const handleModifyOpen = (item) => {
-        setNewTitle(item.titolo);
-        setNewImageUrl(item.image);
-        setNewState(item.stato);
-        setNewCity(item.citta);
-        setNewProvincia(item.provincia);
-        setNewDescription(item.descrizione);
-        setNewPrice(item.prezzo);
-        setNewAdult(item.adulti);
-        setNewChild(item.bambini);
-        setNewStartDate(item.checkIn);
-        setNewEndDate(item.checkOut);
-        localStorage.setItem('id', item.id)
-        setWindowOpenModify(true);
-    };
-
-    const handleModify = async () => {
-        const token = localStorage.getItem('isAdminToken');
-        const id = localStorage.getItem('id');
-
-        try {
-            const response = await fetch(`http://localhost:8080/api/viaggi/modifyById/${id}`, {
-                method: 'PUT',
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    titolo: newTitle,
-                    image: newImageUrl,
-                    stato: newState,
-                    provincia: newProvincia,
-                    citta: newCity,
-                    descrizione: newDescription,
-                    prezzo: newPrice,
-                    adulti: newAdult,
-                    bambini: newChild,
-                    checkIn: newStartDate,
-                    checkOut: newEndDate,
-                }),
-            });
-
-            console.log(response)
-            
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-    
-            const result = await response.json();
-            const updatedItem = result.data;
-
-            setData(prevData => ({
-              ...prevData,
-              content: prevData.content.map(item =>
-                item.id === id ? updatedItem : item
-              ),
-            }));
-
-        resetFields(); // Resetta i campi
-        setWindowOpenModify(false); // Chiude la sezione di modifica
-
-        } catch (error) {
-            console.error('Error during modification:', error);
-        }
-    }
-
-    const handleDelete = async (id) => {
-        const token = localStorage.getItem('isAdminToken');
-        const confirmDelete = window.confirm('Sei sicuro di voler eliminare questo elemento?');
-    
-        if (confirmDelete) {
-            try {
-                const response = await fetch(`http://localhost:8080/api/viaggi/deleteById/${id}`, {
-                    method: 'DELETE',
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json',
-                    },
-                });
-    
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-    
-                // Rimuovo l'elemento dall'array
-                setData(prevData => ({
-                    ...prevData,
-                    content: prevData.content.filter(item => item.id !== id)
-                }));
-                
-            } catch (error) {
-                console.error('Error during deletion:', error);
-            }
-        }
-    };
-
+    // fetch per salvare un nuovo elemento
     const handleCreate = async () => {
+
+        const token = localStorage.getItem('isAdminToken'); // ottengo il token dal localStorage
+
         try {
-            const token = localStorage.getItem('isAdminToken');
+            
             const response = await fetch(`http://localhost:8080/api/viaggi/save`, {
                 method: 'POST',
                 headers: {
@@ -195,20 +106,117 @@ const MainCreazione = () => {
                 content: [result.data, ...prevData.content]
             }));
     
-            resetFields();
-            setWindowOpen(false);
+            resetFields(); // resetto i campi di input
+            setWindowOpen(false); // chiudo il panello
     
         } catch (error) {
             console.error('Error during creation:', error);
         }
     };
 
+    // fetch per modificare un elemento gia esistente
+    const handleModify = async () => {
+
+        const token = localStorage.getItem('isAdminToken'); // ottengo il token dal localStorage
+        const id = localStorage.getItem('id'); // ottengo l'id dellelemento da modificare
+
+        try {
+            const response = await fetch(`http://localhost:8080/api/viaggi/modifyById/${id}`, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    titolo: newTitle,
+                    image: newImageUrl,
+                    stato: newState,
+                    provincia: newProvincia,
+                    citta: newCity,
+                    descrizione: newDescription,
+                    prezzo: newPrice,
+                    adulti: newAdult,
+                    bambini: newChild,
+                    checkIn: newStartDate,
+                    checkOut: newEndDate,
+                }),
+            });
+
+            //console.log(response)
+            
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+    
+            const result = await response.json();
+            const updatedItem = result.data;
+
+            // funzione per riportare le modifiche dell'elemento evitando duplicazioni
+
+            setData(prevData => ({
+              ...prevData,
+              content: prevData.content.map(item =>
+                item.id === id ? updatedItem : item
+              ),
+            }));
+
+        resetFields(); // Resetta i campi
+        setWindowOpenModify(false); // Chiude la sezione di modifica
+
+        } catch (error) {
+            console.error('Error during modification:', error);
+        }
+    }
+
+    // fetch per togliere un elemento gia esistente
+    const handleDelete = async (id) => {
+
+        const token = localStorage.getItem('isAdminToken'); // ottengo il token dal localStorage
+
+        const confirmDelete = window.confirm('Sei sicuro di voler eliminare questo elemento?');
+    
+        if (confirmDelete) {
+            try {
+                const response = await fetch(`http://localhost:8080/api/viaggi/deleteById/${id}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json',
+                    },
+                });
+    
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+    
+                // funzione per rimuovere l'elemento dall'array
+                setData(prevData => ({
+                    ...prevData,
+                    content: prevData.content.filter(item => item.id !== id)
+                }));
+                
+            } catch (error) {
+                console.error('Error during deletion:', error);
+            }
+        }
+    };
+
+    // funzione per aprire il pannello per creare un nuovo elemento
     const handleCreateOpen = () => {
 
         resetFields(); // Resetta i campi per la creazione
         setWindowOpen(true); // Apre la sezione di creazione
     }
 
+    // funzione per chiudere qualunque tipo di panello che sia per cancellare, modificare o salvare un elemento
+    const handleCancel = () => {
+
+        resetFields(); // Resetta i campi
+        setWindowOpen(false); // Chiude la sezione di creazione
+        setWindowOpenModify(false); // Chiude la sezione di modifica
+    };
+
+    // funzione per risettare i campi dopo qualunque fetch
     const resetFields = () => {
 
         setNewTitle('');
@@ -225,12 +233,23 @@ const MainCreazione = () => {
         localStorage.removeItem('id');
     };
 
-    const handleCancel = () => {
-
-        resetFields(); // Resetta i campi
-        setWindowOpen(false); // Chiude la sezione di creazione
-        setWindowOpenModify(false); // Chiude la sezione di modifica
+    //funzione per modificare i vari input dei vari elementi
+    const handleModifyOpen = (item) => {
+        setNewTitle(item.titolo);
+        setNewImageUrl(item.image);
+        setNewState(item.stato);
+        setNewCity(item.citta);
+        setNewProvincia(item.provincia);
+        setNewDescription(item.descrizione);
+        setNewPrice(item.prezzo);
+        setNewAdult(item.adulti);
+        setNewChild(item.bambini);
+        setNewStartDate(item.checkIn);
+        setNewEndDate(item.checkOut);
+        localStorage.setItem('id', item.id) // salvo l'elemento da modificare
+        setWindowOpenModify(true);
     };
+
 
     return (
         <>

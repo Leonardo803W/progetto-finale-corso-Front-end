@@ -1,5 +1,5 @@
 import '../App.css';
-import React, { Component } from 'react'; 
+import React, { Component, useEffect, useState } from 'react'; 
 import { Link } from 'react-router-dom'; 
 import Carousel from 'react-multi-carousel'; 
 import 'react-multi-carousel/lib/styles.css';
@@ -7,7 +7,7 @@ import 'react-multi-carousel/lib/styles.css';
 import GlobalLoading from './GlobalLoading'; 
 import GlobalError from './GlobalError';
 
-// Define responsive breakpoints for the carousel
+// punti definiti per la quantita di card visualizzabili del carosello
 const responsive = {
     desktop: { breakpoint: { max: 3000, min: 1200 }, items: 4, slidesToSlide: 1 },
     laptop: { breakpoint: { max: 1199, min: 768 }, items: 3, slidesToSlide: 1 },
@@ -15,103 +15,119 @@ const responsive = {
     mobile: { breakpoint: { max: 575, min: 0 }, items: 1, slidesToSlide: 1 },
 };
 
-class MainList extends Component {
-    constructor(props) {
-        super(props);
-        // Initialize state
-        this.state = {
-            data: [], // To store fetched data
-            loading: true, // Loading state
-            error: false, // Error state
-            favorites: [], // To store favorite items
-            activeIndex: 0, // To track active carousel index
-            alertMessage: '', // Message for alerts
-        };
-    }
+const MainList = () => {
 
-    // Fetch favorite items from local storage and then fetch data
-    async componentDidMount() {
+    const [data, setData] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const [favorites, setFavorites] = useState([])
+    const [alertMessage, setAlertMessage] = useState('') // per impostare messaggi personalizzati
+    const [activeIndex, setActiveIndex] = useState(0); 
+
+    /*
+    // funzione per gestire i favoriti
+    const favoriteManage = () => {
+
         const savedFavorites = JSON.parse(localStorage.getItem('favorites')) || [];
-        this.setState({ favorites: savedFavorites });
-        await this.fetchData();
+        setFavorites(savedFavorites);
+        await fetchData();
+    }
+        */
+
+    // fetch per visualizzare tuttli gli elementi gia esistenti
+    useEffect(() => {
+
+        const fetchData = async () => {
+
+            setLoading(true);
+            setError(false);
+
+            try {
+                const response = await fetch('http://localhost:8080/api/viaggi/fetchall', {
+
+                    method: 'GET',
+                    headers: {
+                        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJuZWxzb24iLCJyb2xlcyI6WyJST0xFX0FETUlOIl0sImlhdCI6MTc0ODk3NTk4NywiZXhwIjoxNzQ5ODM5OTg3fQ.KTMroG0fhXcpc_WBD-9PgdsW3M8PV-OS8mAuLWxNOL4',
+                        'Content-Type': 'application/json',
+                    },
+                });
+
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+
+                const result = await response.json();
+                //console.log(result)
+                setData(result.data)
+                
+            } catch (error) {
+                setError(error)
+            } finally {
+                setLoading(false)
+            }
+        };
+
+        fetchData();
+    }, []);
+
+    // chiamo l'animazione per far intendere all'utente che vi e un caricamento in corso
+    if (loading) { 
+        return <GlobalLoading />; 
     }
 
-    // Fetch all items from the API
-    fetchData = async () => {
-        this.setState({ loading: true, error: false });
-        try {
-            const response = await fetch('http://localhost:8080/api/viaggi/fetchall', {
-                method: 'GET',
-                headers: {
-                    'Authorization': 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJsZW9uIiwicm9sZXMiOlsiUk9MRV9VU0VSIl0sImlhdCI6MTc0MzA4MDIwNywiZXhwIjoxNzQzOTQ0MjA3fQ.qNzRg0SS0wRcjLW1RdmYAyB1ZHpUur8JYCRZsjiZpzY',
-                    'Content-Type': 'application/json',
-                },
-            });
+    if (error) { 
+        return <GlobalError />; 
+    }
 
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
+    // funzione per gestire i favoriti
+    const handleFavoriteClick = (item) => {
 
-            const result = await response.json();
-            this.setState({ data: result.data }); // Save fetched data to state
-        } catch (error) {
-            this.setState({ error: true }); // Set error state if fetch fails
-        } finally {
-            this.setState({ loading: false }); // Set loading to false after fetching
-        }
-    };
-
-    // Handle adding/removing favorites
-    handleFavoriteClick = (item) => {
         let updatedFavorites;
 
-        if (this.state.favorites.includes(item.id)) {
+        if (favorites.includes(item.id)) {
             
-            // If item is already a favorite, remove it
-            updatedFavorites = this.state.favorites.filter(favId => favId !== item.id);
-            this.setState({ alertMessage: "Rimozione dai preferiti eseguita con successo!" });
+            // controllo se l'elemento sia gia presente e lo tolgo
+            updatedFavorites = favorites.filter(favId => favId !== item.id);
+            setAlertMessage("Rimozione dai preferiti eseguita con successo!")
+
         } else {
 
-            // If item is not a favorite, add it
-            updatedFavorites = [...this.state.favorites, item.id];
-            this.setState({ alertMessage: "Aggiunta ai preferiti riuscita con successo!" });
+            // controllo se l'elemento non sia presente e lo aggiungo
+            updatedFavorites = [...favorites, item.id];
+            setAlertMessage("Aggiunta ai preferiti riuscita con successo!")
         }
 
-        this.setState({ favorites: updatedFavorites });
-        localStorage.setItem('favorites', JSON.stringify(updatedFavorites)); // Save updated favorites to local storage
+        setFavorites(updatedFavorites)
+        localStorage.setItem('favorites', JSON.stringify(updatedFavorites)); // salvo l'elemento nel local storage con il nome favorites
         console.log(localStorage)
         
-        // Remove alert message after 3 seconds
+        //rimuovo l'alert dopo tre secondi e risetto allo stato originale
         setTimeout(() => {
-            this.setState({ alertMessage: '' });
+            setAlertMessage('')
         }, 3000);
     };
 
-    // Handle carousel index change
-    handleBeforeChange = (previous, next) => {
-        this.setState({ activeIndex: next });
+    // funzione per gestire l'indice del carosello
+    const handleBeforeChange = (previous, next) => {
+
+        setActiveIndex(next);
     };
 
-    // Utility function to split the fetched data into chunks for the carousel
-    chunks = (array, size) => {
+    // funzione per dividere il carosello avendo diversi caroselli con tot elementi
+    const chunks = (array, size) => {
+
         const result = [];
+
         for (let i = 0; i < array.length; i += size) {
-            result.push(array.slice(i, i + size)); // Split array into smaller arrays of specified size
+
+            result.push(array.slice(i, i + size)); // divido l'array in array piu piccoli in una specifica dimensione 
         }
+
         return result;
     };
-
-    render() {
-        const { loading, error, alertMessage, activeIndex, data } = this.state;
-
-        // Rendering loading or error components
-        if (loading) { return <GlobalLoading />; }
-        if (error) { return <GlobalError />; }
-
-        // Filtered data to be displayed in the carousel (modify as needed)
-        const filteredData = data; // Adjust this line according to your filtering logic
-
+        
         return (
+
             <div className='mb-4 mt-4'>
                 {alertMessage && (
                     <div className="alertLoginRegister">
@@ -119,8 +135,7 @@ class MainList extends Component {
                     </div>
                 )}
 
-                {/* Render carousel with chunks of filtered data */}
-                {this.chunks(filteredData, 6).map((chunk, index) => (
+                {chunks(data.content, 6).map((chunk, index) => (
                     <Carousel
                         key={index}
                         responsive={responsive}
@@ -134,9 +149,10 @@ class MainList extends Component {
                         containerClass="carousel-container"
                         dotListClass="custom-dot-list-style"
                         itemClass="carousel-item-padding-40-px"
-                        beforeChange={this.handleBeforeChange}
+                        beforeChange={handleBeforeChange}
                     >
                         {chunk.map((item, itemIndex) => (
+
                             <div className={`cardList ${activeIndex === itemIndex ? 'active' : ''}`} key={item.id}>
                                 <h3>{item.titolo}</h3>
                                 <img src={item.image} alt="immagine copertina" />
@@ -158,8 +174,8 @@ class MainList extends Component {
                                     <Link to={`/Dettaglio/${item.id}`}>
                                         <button className='buttonD'>Vai ai dettagli</button>
                                     </Link>   
-                                    <div onClick={() => this.handleFavoriteClick(item)} className='preferitiImg'>
-                                        {this.state.favorites.includes(item.id) ? (
+                                    <div onClick={() => handleFavoriteClick(item)} className='preferitiImg'>
+                                        {favorites.includes(item.id) ? (
                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-heart-fill" viewBox="0 0 16 16">
                                                 <path fillRule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314" />
                                             </svg>
@@ -176,7 +192,6 @@ class MainList extends Component {
                 ))}
             </div>
         );
-    }
 }
 
 export default MainList;

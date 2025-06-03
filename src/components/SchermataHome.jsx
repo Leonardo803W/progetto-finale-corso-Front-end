@@ -15,6 +15,7 @@ const SchermataHome = () =>{
             </header>
 
             <main className = 'imgCopertinahome'>
+
                 <div className = 'mainHome'>
                     <h3 className = 'titlePrimary w-75'>
                         In quale continente ti piacerebbe andare?
@@ -22,13 +23,16 @@ const SchermataHome = () =>{
 
                     <a className = 'linkScorrere' href="#footer">Clicca per vedere gli ultimi elementi.</a>            
                 </div>
+                
                 <Continents />
+
                 <hr />
 
                 <h3 className = 'titlePrimary'>
                     Quale meraviglia del mondo antico ti piacerebbe visitare?
                 </h3>
                 <AnticheMeraviglieMondo />
+
                 <hr />
 
                 <h3 className = 'titlePrimary'>
@@ -37,6 +41,7 @@ const SchermataHome = () =>{
                 <ModerneMeraviglieMondo />
 
                 <a className = 'linkScorrere' href="#header">Clicca per vedere i primi elementi.</a>
+
             </main>
 
             <footer id = 'footer'>
