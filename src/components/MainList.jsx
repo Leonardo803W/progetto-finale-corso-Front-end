@@ -21,18 +21,19 @@ const MainList = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [favorites, setFavorites] = useState([])
+    const [alert, setAlert] = useState(false)
     const [alertMessage, setAlertMessage] = useState('') // per impostare messaggi personalizzati
     const [activeIndex, setActiveIndex] = useState(0); 
+    const [animatingIds, setAnimatingIds] = useState([]);
 
-    /*
-    // funzione per gestire i favoriti
-    const favoriteManage = () => {
-
+    // funzione per tenere salvati i preferiti 
+    useEffect(() => {
+    
         const savedFavorites = JSON.parse(localStorage.getItem('favorites')) || [];
         setFavorites(savedFavorites);
-        await fetchData();
-    }
-        */
+    }, [favorites]);
+
+
 
     // fetch per visualizzare tuttli gli elementi gia esistenti
     useEffect(() => {
@@ -79,34 +80,6 @@ const MainList = () => {
         return <GlobalError />; 
     }
 
-    // funzione per gestire i favoriti
-    const handleFavoriteClick = (item) => {
-
-        let updatedFavorites;
-
-        if (favorites.includes(item.id)) {
-            
-            // controllo se l'elemento sia gia presente e lo tolgo
-            updatedFavorites = favorites.filter(favId => favId !== item.id);
-            setAlertMessage("Rimozione dai preferiti eseguita con successo!")
-
-        } else {
-
-            // controllo se l'elemento non sia presente e lo aggiungo
-            updatedFavorites = [...favorites, item.id];
-            setAlertMessage("Aggiunta ai preferiti riuscita con successo!")
-        }
-
-        setFavorites(updatedFavorites)
-        localStorage.setItem('favorites', JSON.stringify(updatedFavorites)); // salvo l'elemento nel local storage con il nome favorites
-        console.log(localStorage)
-        
-        //rimuovo l'alert dopo tre secondi e risetto allo stato originale
-        setTimeout(() => {
-            setAlertMessage('')
-        }, 3000);
-    };
-
     // funzione per gestire l'indice del carosello
     const handleBeforeChange = (previous, next) => {
 
@@ -125,13 +98,53 @@ const MainList = () => {
 
         return result;
     };
+
+    // funzione per gestire l'animazione dei favoriti
+    const handleFavoriteanimation = (item) => {
+
+        let updatedFavorites;
+
+        if (favorites.includes(item.id)) {
+            
+            // controllo se l'elemento sia gia presente e lo tolgo
+            updatedFavorites = favorites.filter(favId => favId !== item.id);
+            setAlertMessage("Rimozione dai preferiti eseguita con successo!")
+            setAlert(true)
+
+        } else {
+
+            // controllo se l'elemento non sia presente e lo aggiungo
+            updatedFavorites = [...favorites, item.id];
+            setAlertMessage("Aggiunta ai preferiti riuscita con successo!")
+            setAlert(true)
+        }
+
+        setFavorites(updatedFavorites);
+        localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
+        //console.log(localStorage)
+
+        // tempo per il messaggio
+        setTimeout(() => {
+            setAlert(false)
+            setAlertMessage('')
+        }, 4000);
+
+        // Attiva animazione per questo item
+        setAnimatingIds(prev => [...prev, item.id]);
+
+        // tempo per l'animazione 
+        setTimeout(() => {
+            setAnimatingIds(prev => prev.filter(id => id !== item.id));
+        }, 1000);
+    };
         
         return (
 
             <div className='mb-4 mt-4'>
-                {alertMessage && (
-                    <div className="alertLoginRegister">
-                        <p>{alertMessage}</p>
+
+                {alert && (
+                    <div className = "alertFavoriti">
+                        <p className = 'm-0'>{alertMessage}</p>
                     </div>
                 )}
 
@@ -144,9 +157,13 @@ const MainList = () => {
                         showDots={true}
                         ssr={true}
                         keyBoardControl={true}
+                        //infinite={true}
+                        //autoPlay={true}
+                        //autoPlaySpeed={2000}
                         customTransition="all .5"
                         transitionDuration={500}
                         containerClass="carousel-container"
+                        removeArrowOnDeviceType={["tablet", "mobile"]}
                         dotListClass="custom-dot-list-style"
                         itemClass="carousel-item-padding-40-px"
                         beforeChange={handleBeforeChange}
@@ -174,13 +191,29 @@ const MainList = () => {
                                     <Link to={`/Dettaglio/${item.id}`}>
                                         <button className='buttonD'>Vai ai dettagli</button>
                                     </Link>   
-                                    <div onClick={() => handleFavoriteClick(item)} className='preferitiImg'>
+                                    <div onClick={() => handleFavoriteanimation(item)} className='preferitiImg'>
                                         {favorites.includes(item.id) ? (
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-heart-fill" viewBox="0 0 16 16">
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="16"
+                                                height="16"
+                                                fill="currentColor"
+                                                className={`bi bi-heart-fill ${animatingIds.includes(item.id) ? 'heart-pulse' : ''}`}
+                                                viewBox="0 0 16 16"
+                                                id = 'animationHeart1'
+                                            >
                                                 <path fillRule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314" />
                                             </svg>
                                         ) : (
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-heart" viewBox="0 0 16 16">
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="16"
+                                                height="16"
+                                                fill="currentColor"
+                                                className={`bi bi-heart-fill ${animatingIds.includes(item.id) ? 'heart-void' : ''}`}
+                                                viewBox="0 0 16 16"
+                                                id = 'animationHeart2'
+                                            >
                                                 <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143q.09.083.176.171a3 3 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15" />
                                             </svg>
                                         )}

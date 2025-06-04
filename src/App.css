@@ -367,6 +367,70 @@ main{
   padding: 1em;
 }
 
+@keyframes popapp {
+  0% {
+    transform: scale(1);
+    transform: translatey(-100px);
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(2);
+    transform: translatey(0px);
+    opacity: 1;
+  }
+}
+
+.alertFavoriti{
+    animation: popapp 0.5s ease-in-out;
+    color: rgb(61, 255, 94);
+    background-color: #1f891f;
+    border-radius: 10px;
+    z-index: 3;
+    position: absolute;
+    width: 60%;
+    left: 17em;
+    top: 10em;
+    padding: 3em;
+}
+
+@keyframes pulseHeart1 {
+  0% {
+    transform: rotate(0deg);
+    fill: currentColor;
+  }
+  50% {
+    transform: rotate(180deg);
+    fill: rgb(255, 183, 183); 
+  }
+  100% {
+    transform: rotate(360deg);
+    color: white;
+  }
+}
+
+.heart-void {
+  animation: pulseHeart1 0.5s ease;
+}
+
+@keyframes pulseHeart2 {
+  0% {
+    transform: scale(1);
+    fill: currentColor;
+  }
+  50% {
+    transform: scale(2.5);
+    fill: rgb(255, 106, 106); 
+  }
+  100% {
+    transform: scale(1);
+    color: red;
+  }
+}
+
+.heart-pulse {
+  animation: pulseHeart2 0.5s ease;
+}
+
 /*main Dettaglio*/
 
 #imgCopertinaDettaglio{
