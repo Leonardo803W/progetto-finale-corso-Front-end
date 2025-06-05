@@ -15,7 +15,7 @@ dipendenze utilizzate lato Front-end:
 1. React
 Link Documentation: https://react.dev/learn
 Installazione: npm install react react-dom
-Scopo: React è una libreria JavaScript per costruireinterfacce utente. Permette di creare componenti riutilizzabili e gestire lo stato in modo efficiente.
+Scopo: React è una libreria JavaScript per costruire interfacce utente. Permette di creare componenti riutilizzabili e gestire lo stato in modo efficiente.
 
 2. React Router DOM
 Link Documentation: https://reactrouter.com
